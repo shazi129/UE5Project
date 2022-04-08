@@ -1,12 +1,17 @@
 .vs
 *.sln
-Binaries
 Content/Developers
-DerivedDataCache
-Intermediate
-Saved
 enc_temp_folder
 Content/StarterContent
 Content/AnimStarterPack
 
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+Plugins/**/Saved/
+Plugins/**/DerivedDataCache/
 
