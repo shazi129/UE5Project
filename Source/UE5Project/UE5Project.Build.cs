@@ -17,8 +17,7 @@ public class UE5Project : ModuleRules
             "GameplayTags",
             "GameplayTasks",
             "ApplicationCore",
-            "GameUIManager",
-			"RenderCore" });
+            "GameUIManager"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

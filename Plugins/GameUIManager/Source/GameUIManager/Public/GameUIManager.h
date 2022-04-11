@@ -1,30 +1,27 @@
 #pragma once
 
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "GameUIPanel.h"
 #include "GameUIPopLayout.h"
 #include "GameUIManager.generated.h"
 
 
 UCLASS(BlueprintType)
-class GAMEUIMANAGER_API UGameUIManager : public UObject
+class GAMEUIMANAGER_API UGameUIManager : public UGameInstanceSubsystem
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", UnsafeDuringActorConstruction = "true"))
-		static UGameUIManager* GetGameUIManager(const UObject* WorldContextObject);
 
-private:
-	static TArray<UGameUIManager*> Instances;
-
-public:
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	virtual void Deinitialize() override;
 
 	void OnWorldTearingDown(UWorld* World);
 
-	virtual void BeginDestroy() override;
+public:
 
-	UFUNCTION(BlueprintCallable)
-		void SetOwningPlayer(APlayerController* LocalPlayerController);
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject", UnsafeDuringActorConstruction = "true"))
+		static UGameUIManager* GetGameUIManager(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable)
 		void SetPanelTemplate(TSubclassOf<UGameUIPanel> panelTemplate);
@@ -72,5 +69,4 @@ private:
 		TMap<UWorld*, UGameUIPanel*> PanelCache2; 
 
 	TSubclassOf<UGameUIPanel> PanelTemplateCls;
-	TWeakObjectPtr<APlayerController> PlayerController;
 };

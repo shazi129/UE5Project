@@ -1,83 +1,36 @@
 #include "GameUIManager.h"
 #include "GameUIManagerModule.h"
 #include "GameDelegates.h"
+#include "Kismet/GameplayStatics.h"
 
-TArray<UGameUIManager*>UGameUIManager::Instances;
-
-UGameUIManager* UGameUIManager::GetGameUIManager(const UObject* WorldContextObject)
+void UGameUIManager::Initialize(FSubsystemCollectionBase& Collection)
 {
-	if (!WorldContextObject)
-	{
-		UE_LOG(LogGameUIManager, Error, TEXT("---UGameUIManager GetGameUIManager error, WorldContextObject is null"));
-		return nullptr;
-	}
-
-	UWorld* World = WorldContextObject->GetWorld();
-	//有时会出现上下文不对的情况，例如第一调用是实在ts的Promise内
-	if (!World || !World->IsGameWorld())
-	{
-		UE_LOG(LogGameUIManager, Error, TEXT("---UGameUIManager GetGameUIManager error, Cannot get game world"));
-		return nullptr;
-	}
-
-	for (int i = Instances.Num() - 1; i >= 0; i--)
-	{
-		UGameUIManager* Instance = Instances[i];
-		if (!Instance || Instance->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed))
-		{
-			Instances.RemoveAt(i);
-		}
-		else if (Instance->GetWorld() == World)
-		{
-			return Instance;
-		}
-	}
-
-	//
-	UGameUIManager* Instance = NewObject<UGameUIManager>(World);
-	Instances.Add(Instance);
-	return Instance;
-}
-
-UGameUIManager::UGameUIManager(const FObjectInitializer& ObjectInitializer) 
-	: Super(ObjectInitializer)
-{
-	AddToRoot();
-
+	Super::Initialize(Collection);
 	FWorldDelegates::OnWorldBeginTearDown.AddUObject(this, &UGameUIManager::OnWorldTearingDown);
 }
 
 void UGameUIManager::OnWorldTearingDown(UWorld* World)
 {
-	if (World == this->GetWorld())
+	if (World == GetWorld())
 	{
-		RemoveFromRoot();
-	}
-}
-
-void UGameUIManager::BeginDestroy()
-{
-	Super::BeginDestroy();
-
-	if (CurrentPanel != nullptr)
-	{
-		RemoveCurrentPanel();
-	}
-	PanelCache.Empty();
-
-	for (int i = Instances.Num() - 1; i >= 0; i--)
-	{
-		if (this == Instances[i])
+		if (CurrentPanel != nullptr)
 		{
-			Instances.RemoveAt(i);
-			break;
+			RemoveCurrentPanel();
 		}
+		PanelCache.Empty();
 	}
 }
 
-void UGameUIManager::SetOwningPlayer(APlayerController* LocalPlayerController)
+void UGameUIManager::Deinitialize()
 {
-	PlayerController = MakeWeakObjectPtr(LocalPlayerController);
+	Super::Deinitialize();
+
+}
+
+UGameUIManager* UGameUIManager::GetGameUIManager(const UObject* WorldContextObject)
+{
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
+	return GameInstance->GetSubsystem<UGameUIManager>();
 }
 
 void UGameUIManager::SetPanelTemplate(TSubclassOf<UGameUIPanel> panelTemplate)
@@ -145,15 +98,7 @@ UGameUIPanel* UGameUIManager::FindOrCreateUIPanel(TSubclassOf<UUserWidget> widge
 	}
 
 	//创建模板对象
-	UWidget* widget = nullptr;
-	if (PlayerController != nullptr)
-	{
-		widget = CreateWidget(PlayerController.Get(), PanelTemplateCls, panelName);
-	}
-	else
-	{
-		widget = CreateWidget(GetWorld(), PanelTemplateCls);
-	}
+	UWidget* widget = CreateWidget(GetWorld(), PanelTemplateCls);
 	
 	if (widget == nullptr)
 	{
