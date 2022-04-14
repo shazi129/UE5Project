@@ -25,6 +25,7 @@ bool UExpandedUserWidget::Initialize()
 	if (Proxy != nullptr)
 	{
 		Proxy->SetTarget(this);
+		Proxy->Initialize();
 	}
 	return Super::Initialize();
 }
@@ -35,7 +36,7 @@ void UExpandedUserWidget::NativeOnInitialized()
 
 	if (Proxy != nullptr)
 	{
-		Proxy->OnWidgetInitialized();
+		Proxy->NativeOnInitialized();
 	}
 }
 void UExpandedUserWidget::NativePreConstruct()
@@ -44,7 +45,7 @@ void UExpandedUserWidget::NativePreConstruct()
 
 	if (Proxy != nullptr)
 	{
-		Proxy->PreWidgetConstruct();
+		Proxy->NativePreConstruct();
 	}
 }
 
@@ -54,7 +55,7 @@ void UExpandedUserWidget::NativeConstruct()
 
 	if (Proxy != nullptr)
 	{
-		Proxy->WidgetConstruct();
+		Proxy->NativeConstruct();
 	}
 }
 
@@ -64,7 +65,7 @@ void UExpandedUserWidget::NativeDestruct()
 
 	if (Proxy != nullptr)
 	{
-		Proxy->WidgetDestruct();
+		Proxy->NativeDestruct();
 	}
 }
 
@@ -74,7 +75,7 @@ void UExpandedUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
 
 	if (Proxy != nullptr)
 	{
-		Proxy->WidgetTick(MyGeometry, InDeltaTime);
+		Proxy->NativeTick(MyGeometry, InDeltaTime);
 	}
 }
 
@@ -83,7 +84,7 @@ void UExpandedUserWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWor
 	Super::OnLevelRemovedFromWorld(InLevel, InWorld);
 	if (Proxy != nullptr)
 	{
-		Proxy->OnLevelRemovedFromWorld(InLevel, InWorld);
+		Proxy->NativeOnLevelRemovedFromWorld(InLevel, InWorld);
 	}
 }
 void UExpandedUserWidget::OnWidgetRebuilt()
@@ -91,7 +92,7 @@ void UExpandedUserWidget::OnWidgetRebuilt()
 	Super::OnWidgetRebuilt();
 	if (Proxy != nullptr)
 	{
-		Proxy->OnWidgetRebuilt();
+		Proxy->NativeOnWidgetRebuilt();
 	}
 }
 
@@ -102,7 +103,7 @@ FReply UExpandedUserWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry,
 	{
 		return Replay;
 	}
-	return Proxy->OnMouseButtonDown(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 }
 
 FReply UExpandedUserWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -112,7 +113,7 @@ FReply UExpandedUserWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGe
 	{
 		return Replay;
 	}
-	return Proxy->OnPreviewMouseButtonDown(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnPreviewMouseButtonDown(InGeometry, InMouseEvent);
 }
 
 FReply UExpandedUserWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -122,7 +123,7 @@ FReply UExpandedUserWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, c
 	{
 		return Replay;
 	}
-	return Proxy->OnMouseButtonUp(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnMouseButtonUp(InGeometry, InMouseEvent);
 }
 
 FReply UExpandedUserWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -137,7 +138,7 @@ FReply UExpandedUserWidget::NativeOnMouseMove(const FGeometry& InGeometry, const
 	{
 		return Replay;
 	}
-	return Proxy->OnMouseMove(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnMouseMove(InGeometry, InMouseEvent);
 }
 
 void UExpandedUserWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -145,7 +146,7 @@ void UExpandedUserWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const 
 	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
 	if (Proxy != nullptr)
 	{
-		Proxy->OnMouseMove(InGeometry, InMouseEvent);
+		Proxy->NativeOnMouseEnter(InGeometry, InMouseEvent);
 	}
 }
 void UExpandedUserWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
@@ -153,7 +154,7 @@ void UExpandedUserWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 	Super::NativeOnMouseLeave(InMouseEvent);
 	if (Proxy != nullptr)
 	{
-		Proxy->OnMouseLeave(InMouseEvent);
+		Proxy->NativeOnMouseLeave(InMouseEvent);
 	}
 }
 
@@ -164,7 +165,7 @@ FReply UExpandedUserWidget::NativeOnMouseWheel(const FGeometry& InGeometry, cons
 	{
 		return Replay;
 	}
-	return Proxy->OnMouseWheel(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnMouseWheel(InGeometry, InMouseEvent);
 }
 
 FReply UExpandedUserWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -174,5 +175,5 @@ FReply UExpandedUserWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGe
 	{
 		return Replay;
 	}
-	return Proxy->OnMouseButtonDoubleClick(InGeometry, InMouseEvent).NativeReply;
+	return Proxy->NativeOnMouseButtonDoubleClick(InGeometry, InMouseEvent);
 }

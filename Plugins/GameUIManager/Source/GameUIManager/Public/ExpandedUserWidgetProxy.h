@@ -14,6 +14,25 @@ class GAMEUIMANAGER_API UExpandedUserWidgetProxy : public UObject
 public:
 	UExpandedUserWidgetProxy(const FObjectInitializer& ObjectInitializer);
 
+	/// 代理的UserWidget的方法
+	virtual bool Initialize();
+	virtual void NativeOnInitialized();
+	virtual void NativePreConstruct();
+	virtual void NativeConstruct();
+	virtual void NativeDestruct();
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
+	virtual void NativeOnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld);
+	virtual void NativeOnWidgetRebuilt();
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent);
+	virtual FReply NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	virtual FReply NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+
+public:
 	UFUNCTION(BlueprintCallable)
 		UExpandedUserWidget* GetTarget();
 
@@ -68,7 +87,7 @@ public:
 public:
 	void SetTarget(UExpandedUserWidget* Widget);
 
-private:
+protected:
 	UPROPERTY()
 		UExpandedUserWidget* UserWidget;
 };

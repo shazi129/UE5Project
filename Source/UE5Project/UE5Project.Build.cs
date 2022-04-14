@@ -12,6 +12,7 @@ public class UE5Project : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+            "UMG",
 			"InputCore",
 			"GameplayAbilities",
             "GameplayTags",
