@@ -5,6 +5,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+//#include "ModularGameplay/Components/GameFrameworkComponentManager.h"
+#include "../../../Experimental/ModularGameplay/Source/ModularGameplay/Public/Components/GameFrameworkComponentManager.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -43,6 +46,19 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(this);
+	UGameFrameworkComponentManager* ComponentMgr = GameInstance->GetSubsystem<UGameFrameworkComponentManager>();
+	ComponentMgr->AddReceiver(this);
+}
+
+void ABaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(this);
+	UGameFrameworkComponentManager* ComponentMgr = GameInstance->GetSubsystem<UGameFrameworkComponentManager>();
+	ComponentMgr->RemoveReceiver(this);
 }
 
 // Called every frame

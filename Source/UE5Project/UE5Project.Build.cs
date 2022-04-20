@@ -18,7 +18,9 @@ public class UE5Project : ModuleRules
             "GameplayTags",
             "GameplayTasks",
             "ApplicationCore",
-            "GameUIManager"});
+            "GameUIManager",
+            "ModularGameplay"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
