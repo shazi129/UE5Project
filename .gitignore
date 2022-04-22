@@ -15,3 +15,11 @@ Plugins/**/Intermediate/
 Plugins/**/Saved/
 Plugins/**/DerivedDataCache/
 
+Content/JavaScript/ffi
+Content/JavaScript/puerts
+Content/JavaScript/PuertsEditor
+Content/JavaScript/react-umg
+Content/JavaScript/thirdparty
+Content/JavaScript/utils
+
+ts_file_versions_info.json
