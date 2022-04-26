@@ -2,19 +2,23 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "FirstGameFeature",
+	"FriendlyName": "AutoPlay",
 	"Description": "",
-	"Category": "Game Features",
-	"CreatedBy": "",
+	"Category": "Other",
+	"CreatedBy": "zhangwen",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
-	"EnabledByDefault": true,
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
-	"ExplicitlyLoaded": true,
-	"BuiltInInitialFeatureState": "Installed"
+	"Modules": [
+		{
+			"Name": "AutoPlay",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
 }

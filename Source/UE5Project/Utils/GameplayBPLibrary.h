@@ -57,4 +57,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "GameplayBPLibrary")
 		static bool IsClient(AActor* Actor);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "GameplayBPLibrary")
+		static int GetArrayGameplayConfig(const FString& Section, const FString& Key, TArray<FString>& Value);
 };

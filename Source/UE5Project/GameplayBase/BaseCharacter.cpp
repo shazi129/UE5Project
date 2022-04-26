@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 //#include "ModularGameplay/Components/GameFrameworkComponentManager.h"
 #include "../../../Experimental/ModularGameplay/Source/ModularGameplay/Public/Components/GameFrameworkComponentManager.h"
+#include "../../../Experimental/GameFeatures/Source/GameFeatures/Public/GameFeaturesSubsystem.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -50,6 +51,7 @@ void ABaseCharacter::BeginPlay()
 	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(this);
 	UGameFrameworkComponentManager* ComponentMgr = GameInstance->GetSubsystem<UGameFrameworkComponentManager>();
 	ComponentMgr->AddReceiver(this);
+
 }
 
 void ABaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)

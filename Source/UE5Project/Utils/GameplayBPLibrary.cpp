@@ -166,3 +166,20 @@ bool UGameplayBPLibrary::IsClient(AActor* Actor)
 		return !Actor->HasAuthority();
 	}
 }
+
+int UGameplayBPLibrary::GetArrayGameplayConfig(const FString& Section, const FString& Key, TArray<FString>& Value)
+{
+	if (!GConfig)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UGameplayBPLibrary::GetArrayGameplayConfig: GConfig is null"));
+		return 0;
+	}
+
+	if (!GConfig->IsKnownConfigName("DefaultGameplay"))
+	{
+		FString ConfigFile("DefaultGameplay.ini");
+		GConfig->LoadGlobalIniFile(ConfigFile, TEXT("DefaultGameplay"), NULL, NULL, true);
+	}
+
+	return GConfig->GetArray(*Section, *Key, Value, "DefaultGameplay");
+}

@@ -33,10 +33,6 @@
 		{
 			"Name": "GameFeatures",
 			"Enabled": true
-		},
-		{
-			"Name": "Puerts",
-			"Enabled": true
 		}
 	]
 }
