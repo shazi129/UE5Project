@@ -35,6 +35,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "PawnState",
+			"Enabled": true
+		},
+		{
 			"Name": "Puerts",
 			"Enabled": true
 		}

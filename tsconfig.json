@@ -3,7 +3,10 @@
         "target": "esnext",
         "module": "commonjs",
         "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "sourceMap": true,
+        "baseUrl": ".",
         "typeRoots": [
             "Plugins/Puerts/Typing",
             "./node_modules/@types"
