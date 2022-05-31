@@ -41,6 +41,10 @@
 		{
 			"Name": "Puerts",
 			"Enabled": true
+		},
+		{
+			"Name": "ExEditorTools",
+			"Enabled": true
 		}
 	]
 }
