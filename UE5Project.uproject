@@ -23,10 +23,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "GameUIManager",
-			"Enabled": true
-		},
-		{
 			"Name": "ModularGameplay",
 			"Enabled": true
 		},
@@ -35,15 +31,11 @@
 			"Enabled": true
 		},
 		{
-			"Name": "PawnState",
-			"Enabled": true
-		},
-		{
 			"Name": "Puerts",
 			"Enabled": true
 		},
 		{
-			"Name": "ExEditorTools",
+			"Name": "ExGameplayPlugin",
 			"Enabled": true
 		}
 	]

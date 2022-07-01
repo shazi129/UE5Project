@@ -23,13 +23,15 @@ class UTestRPCComponent : public UActorComponent
 
 public:
 
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable)
 		void StartServerTest();
 
 	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
 		void ServerTest();
 
-	UFUNCTION(Reliable, Client, WithValidation, BlueprintCallable)
+	UFUNCTION(Reliable, NetMultiCast, WithValidation, BlueprintCallable)
 		void NotifyServerTestResult(const FRPCParamater& Paramater);
 
 };

@@ -1,5 +1,12 @@
 #include "TestRPCComponent.h"
 
+void UTestRPCComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	AActor* Owner = GetOwner();
+	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::BeginPlay, role[%d], NetMode[%d]"), Owner->GetLocalRole(), Owner->GetNetMode());
+}
+
 void UTestRPCComponent::StartServerTest()
 {
 	AActor* Owner = GetOwner();
