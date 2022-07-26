@@ -3,6 +3,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "ExGameplayAbilitiesModule.h"
 #include "ExGameplayLibrary.h"
+#include "ExAbilityProvider.h"
 
 void UExAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
 {
@@ -25,6 +26,27 @@ void UExAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActo
 	//GrantDefaultAbilitiesAndAttributes();
 }
 
+void UExAbilitySystemComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//收集Owner身上的Ability
+	const TSet<UActorComponent*>& OwnedComponents = GetOwner()->GetComponents();
+	for (UActorComponent* Component : OwnedComponents)
+	{
+		IExAbilityProvider* AbilityProvider = Cast<IExAbilityProvider>(Component);
+		if (AbilityProvider)
+		{
+			RegisterAbilityProvider(AbilityProvider);
+		}
+	}
+}
+
+void UExAbilitySystemComponent::EndPlay(EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+}
+
 void UExAbilitySystemComponent::BeginDestroy()
 {
 	if (AbilityActorInfo && AbilityActorInfo->OwnerActor.IsValid())
@@ -34,76 +56,65 @@ void UExAbilitySystemComponent::BeginDestroy()
 			GameInstance->GetOnPawnControllerChanged().RemoveAll(this);
 		}
 	}
-
 	Super::BeginDestroy();
 }
 
 void UExAbilitySystemComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME_CONDITION(UExAbilitySystemComponent, InputTags, COND_AutonomousOnly);
 }
 
-// FGameplayAbilitySpecHandle UExAbilitySystemComponent::GrantAbilityOfType(TSubclassOf<UGameplayAbility> AbilityType, bool bRemoveAfterActivation)
-// {
-// 	FGameplayAbilitySpecHandle AbilityHandle;
-// 	if (AbilityType)
-// 	{
-// 		FGameplayAbilitySpec AbilitySpec(AbilityType);
-// 		AbilitySpec.RemoveAfterActivation = bRemoveAfterActivation;
-// 
-// 		AbilityHandle = GiveAbility(AbilitySpec);
-// 	}
-// 	return AbilityHandle;
-// }
-// 
-// void UExAbilitySystemComponent::GrantDefaultAbilitiesAndAttributes()
-// {
-// 	// Reset/Remove abilities if we had already added them
-// 	{
-// 		for (UAttributeSet* AttribSetInstance : AddedAttributes)
-// 		{
-// 			GetSpawnedAttributes_Mutable().Remove(AttribSetInstance);
-// 		}
-// 
-// 		for (FGameplayAbilitySpecHandle AbilityHandle : DefaultAbilityHandles)
-// 		{
-// 			SetRemoveAbilityOnEnd(AbilityHandle);
-// 		}
-// 
-// 		AddedAttributes.Empty(DefaultAttributes.Num());
-// 		DefaultAbilityHandles.Empty(DefaultAbilities.Num());
-// 	}
-// 
-// 	// Default abilities
-// 	{
-// 		DefaultAbilityHandles.Reserve(DefaultAbilities.Num());
-// 		for (const TSubclassOf<UGameplayAbility>& Ability : DefaultAbilities)
-// 		{
-// 			if (*Ability)
-// 			{
-// 				DefaultAbilityHandles.Add(GiveAbility(FGameplayAbilitySpec(Ability)));
-// 			}
-// 		}
-// 	}
-// 
-// 	// Default attributes
-// 	{
-// 		for (const FExAttributeApplication& Attributes : DefaultAttributes)
-// 		{
-// 			if (Attributes.AttributeSetType)
-// 			{
-// 				UAttributeSet* NewAttribSet = NewObject<UAttributeSet>(this, Attributes.AttributeSetType);
-// 				if (Attributes.InitializationData)
-// 				{
-// 					NewAttribSet->InitFromMetaDataTable(Attributes.InitializationData);
-// 				}
-// 				AddedAttributes.Add(NewAttribSet);
-// 				AddAttributeSetSubobject(NewAttribSet);
-// 			}
-// 		}
-// 	}
-// }
+void UExAbilitySystemComponent::CollectAbilitCases(TArray<FExAbilityCase>& Abilities) const
+{
+	for (const FExAbilityCase& Ability : DefaultAbilities)
+	{
+		Abilities.Add(Ability);
+	}
+}
+
+void UExAbilitySystemComponent::RegisterAbilityProvider(IExAbilityProvider* ProviderObject)
+{
+	if (ProviderObject == nullptr)
+	{
+		return;
+	}
+
+	if (GetOwner()->HasAuthority() == false)
+	{
+		EXABILITY_LOG(Log, TEXT("UExAbilitySystemComponent::RegisterAbilityProvider ignore, has no authority"));
+		return;
+	}
+
+	TArray<FExAbilityCase> AbilityCases;
+	ProviderObject->CollectAbilitCases(AbilityCases);
+	for (const FExAbilityCase& AbilityCase : AbilityCases)
+	{
+		GiveAbilityByCaseInternal(AbilityCase, Cast<UObject>(ProviderObject));
+	}
+}
+
+void UExAbilitySystemComponent::UnregisterAbilityProvider(IExAbilityProvider* ProviderObject)
+{
+
+}
+
+FGameplayAbilitySpec* UExAbilitySystemComponent::FindAbilitySpecFromCase(const FExAbilityCase& AbilityCase)
+{
+	if (AbilityCase.IsValid() == false)
+	{
+		return nullptr;
+	}
+
+	for (FGameplayAbilitySpec& Spec : ActivatableAbilities.Items)
+	{
+		if (Spec.Ability == AbilityCase.AbilityClass->GetDefaultObject())
+		{
+			return &Spec;
+		}
+	}
+
+	return nullptr;
+}
 
 void UExAbilitySystemComponent::OnPawnControllerChanged(APawn* Pawn, AController* NewController)
 {
@@ -123,71 +134,38 @@ FGameplayAbilitySpecHandle UExAbilitySystemComponent::GiveAbilityByCaseInternal(
 {
 	if (!AbilityProvider)
 	{
-		AbilityProvider = GetOwnerActor();
+		AbilityProvider = this;
 	}
 
-	UExGameplayAbility* const GameplayAbility = AbilityCase.AbilityTemplate ? AbilityCase.AbilityTemplate : AbilityCase.AbilityClass.GetDefaultObject();
-
-	if (ensureMsgf(GameplayAbility != nullptr, TEXT("GiveAbilityByCase Error! AbilityCase.AbilityClass is empty")))
+	if (AbilityCase.IsValid() == false)
 	{
-		//如果Case没填，则使用实例上默认配置的InputTag
-		FGameplayTag InputTag = AbilityCase.InputTag;
-		if (!InputTag.IsValid())
-		{
-			InputTag = GameplayAbility->InputTag;
-		}
-
-		FGameplayAbilitySpec Spec(const_cast<UExGameplayAbility*>(GameplayAbility), AbilityCase.AbilityLevel, InputTagToIDOrGenerate(InputTag), (AbilityProvider));
-		const FGameplayAbilitySpecHandle& SpecHandle = GiveAbility(Spec);
-
-		for (int i = 0; i < GameplayAbility->AcceptInputTag.Num(); i++)
-		{
-			InputTags.AddUnique(GameplayAbility->AcceptInputTag.GetByIndex(i));
-		}
-
-		if (AbilityCase.AbilitySpecHandlePtr)
-		{
-			*AbilityCase.AbilitySpecHandlePtr = SpecHandle;
-		}
-		if (AbilityCase.ActivateWhenGiven)
-		{
-			TryActivateAbility(SpecHandle);
-		}
-		return SpecHandle;
+		ABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::GiveAbilityByCaseInternal error, AbilityCase Invalid"));
+		return FGameplayAbilitySpecHandle();
 	}
-	return FGameplayAbilitySpecHandle();
+
+	FGameplayAbilitySpec Spec(AbilityCase.AbilityClass, AbilityCase.AbilityLevel, INDEX_NONE, (AbilityProvider));
+	const FGameplayAbilitySpecHandle& SpecHandle = GiveAbility(Spec);
+
+	if (AbilityCase.ActivateWhenGiven)
+	{
+		TryActivateAbility(SpecHandle);
+	}
+
+	return SpecHandle;
 }
 
 void UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData_Implementation(const FExAbilityCase& AbilityCase, const FGameplayEventData& TriggerEventData, UObject* SourceObj)
 {
-	//带EventData的不在客户端激活
-	if (!GetOwner()->HasAuthority())
-	{
-		EXABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData error, Cannot Activate in Client"));
-		return;
-	}
-
 	//通过class 找到handler
-	UClass* AbilityClass = AbilityCase.AbilityClass;
-	if (AbilityCase.AbilityTemplate != nullptr)
+	FGameplayAbilitySpec* Spec = FindAbilitySpecFromCase(AbilityCase);
+	if (Spec && Spec->Handle.IsValid())
 	{
-		AbilityClass = AbilityCase.AbilityTemplate->StaticClass();
+		InternalTryActivateAbility(Spec->Handle, FPredictionKey(), nullptr, nullptr, &TriggerEventData);
 	}
-	if (AbilityClass == nullptr)
+	else
 	{
-		EXABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData error, Ability Class is NULL"));
-		return;
+		EXABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData error, Spec invalid"));
 	}
-
-	FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromClass(AbilityClass);
-	if (AbilitySpec == nullptr || AbilitySpec->Handle.IsValid() == false)
-	{
-		EXABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData error, Ability[%s] was not given"), *GetNameSafe(AbilityClass));
-		return;
-	}
-
-	bool Activated = InternalTryActivateAbility(AbilitySpec->Handle, FPredictionKey(), nullptr, nullptr, &TriggerEventData);
-	EXABILITY_LOG(Verbose, TEXT("TryActivateAbilityOnce Ability:%s Activated:%d"), *GetNameSafe(AbilityCase.AbilityClass.Get()), (int)Activated);
 }
 
 bool UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData_Validate(const FExAbilityCase& AbilityCase, const FGameplayEventData& TriggerEventData, UObject* SourceObj)
@@ -195,12 +173,19 @@ bool UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData_Validate(con
 	return true;
 }
 
-#pragma region /////////////////////////////////////Code for handling Ability Input ////////////////////////////////////////
-
-int UExAbilitySystemComponent::InputTagToIDOrGenerate(const FGameplayTag& InputTag)
+void UExAbilitySystemComponent::TryActivateAbilityByCase(const FExAbilityCase& AbilityCase)
 {
-	return InputTags.AddUnique(InputTag);
-}
+	FGameplayAbilitySpec* Spec = FindAbilitySpecFromCase(AbilityCase);
+	if (Spec && Spec->Handle.IsValid())
+	{
+		TryActivateAbility(Spec->Handle);
+	}
+	else
+	{
+		EXABILITY_LOG(Error, TEXT("UExAbilitySystemComponent::TryActivateAbilityByCase error, Handle for case is invalid"));
+		return;
+	}
 
-#pragma endregion
+	
+}
 

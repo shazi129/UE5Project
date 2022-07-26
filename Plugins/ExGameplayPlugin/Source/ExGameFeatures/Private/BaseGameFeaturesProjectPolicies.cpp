@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/BaseGameFeaturesProjectPolicies.h"
+#include "BaseGameFeaturesProjectPolicies.h"
 #include "GameFeaturesSubsystem.h"
 #include "Misc/CoreMisc.h"
 

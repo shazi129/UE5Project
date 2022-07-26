@@ -1,12 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/Actions/GameFeatureAction_AddAbilities.h"
+#include "Actions/GameFeatureAction_AddAbilities.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "GameFeaturesSubsystemSettings.h"
 #include "Engine/AssetManager.h"
-#include "AbilitySystem/TIKIAbilitySystemComponent.h"
+#include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
-#include "AbilitySystem/AbilityInputBindingComponent.h"
+#include "AbilityInputBindingComponent.h"
 
 #define LOCTEXT_NAMESPACE "GameFeatures"
 

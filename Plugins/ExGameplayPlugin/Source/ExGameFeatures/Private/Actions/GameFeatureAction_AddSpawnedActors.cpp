@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/Actions/GameFeatureAction_AddSpawnedActors.h"
+#include "Actions/GameFeatureAction_AddSpawnedActors.h"
 #include "Engine/AssetManager.h"
 #include "GameFeaturesSubsystemSettings.h"
 

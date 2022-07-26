@@ -1,4 +1,4 @@
-#include "GameFeatures/GameFeaturesWorldManager.h"
+#include "GameFeaturesWorldManager.h"
 
 FWorldDelegates::FWorldEvent UGameFeaturesWorldManager::OnWorldBeginplayDelegate;
 

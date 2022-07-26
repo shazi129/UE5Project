@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFeatures/Actions/GameFeatureAction_WorldActionBase.h"
+#include "GameFeatureAction_WorldActionBase.h"
 #include "Abilities/GameplayAbility.h"
 #include "GameFeatureAction_AddAbilities.generated.h"
 

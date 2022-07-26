@@ -23,7 +23,7 @@ enum class EBPGameFeatureState : uint8
  * 
  */
 UCLASS()
-class UGameFeatureBPLibrary : public UBlueprintFunctionLibrary
+class  UGameFeatureBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

@@ -6,7 +6,7 @@
 
 /** Base class for world system objects. */
 UCLASS(Abstract, Blueprintable)
-class SOC_CLIENT_API UGameFeatureWorldSystem : public UObject
+class EXGAMEFEATURES_API UGameFeatureWorldSystem : public UObject
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,7 @@ public:
  * (ref counts requests to account for multiple feature requesting the same system).
  */
 UCLASS()
-class SOC_CLIENT_API UGameFeaturesWorldManager : public UWorldSubsystem
+class EXGAMEFEATURES_API UGameFeaturesWorldManager : public UWorldSubsystem
 {
 	GENERATED_BODY()
 

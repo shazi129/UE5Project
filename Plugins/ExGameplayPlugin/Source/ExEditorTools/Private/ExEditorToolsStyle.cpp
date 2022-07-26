@@ -40,7 +40,7 @@ const FVector2D Icon40x40(40.0f, 40.0f);
 TSharedRef< FSlateStyleSet > FExEditorToolsStyle::Create()
 {
 	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("ExEditorToolsStyle"));
-	Style->SetContentRoot(IPluginManager::Get().FindPlugin("ExEditorTools")->GetBaseDir() / TEXT("Resources"));
+	Style->SetContentRoot(IPluginManager::Get().FindPlugin("ExGameplayPlugin")->GetBaseDir() / TEXT("Resources"));
 
 	Style->Set("ExEditorTools.OpenPluginWindow", new IMAGE_BRUSH(TEXT("ToolIcon_40x"), Icon40x40));
 

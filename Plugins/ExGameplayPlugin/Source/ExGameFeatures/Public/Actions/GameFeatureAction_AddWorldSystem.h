@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFeatures/GameFeaturesWorldManager.h"
+#include "GameFeaturesWorldManager.h"
 #include "GameFeatureAction_WorldActionBase.h"
 #include "GameFeatureAction_AddWorldSystem.generated.h"
 
@@ -27,7 +27,7 @@ struct FGameFeatureWorldSystemEntry
  * specific feature (allows for users to define those system objects in Blueprints).
  */
 UCLASS(meta = (DisplayName = "Add World System"))
-class SOC_CLIENT_API UGameFeatureAction_AddWorldSystem final : public UGameFeatureAction_WorldActionBase
+class EXGAMEFEATURES_API UGameFeatureAction_AddWorldSystem final : public UGameFeatureAction_WorldActionBase
 {
 	GENERATED_BODY()
 

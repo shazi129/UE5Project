@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "ExGameplayAbility.h"
 #include "ExAttributeSet.h"
+#include "ExAbilityProvider.h"
 #include "ExAbilitySystemComponent.generated.h"
 
 USTRUCT()
@@ -23,17 +24,28 @@ struct FExAttributeApplication
 		UDataTable* InitializationData = nullptr;
 };
 
-UCLASS(Blueprintable, ClassGroup = AbilitySystem, editinlinenew, meta = (BlueprintSpawnableComponent))
-class EXGAMEPLAYABILITIES_API UExAbilitySystemComponent : public UAbilitySystemComponent
+UCLASS(Blueprintable, ClassGroup = AbilitySystem, meta = (BlueprintSpawnableComponent))
+class EXGAMEPLAYABILITIES_API UExAbilitySystemComponent : public UAbilitySystemComponent, public IExAbilityProvider
 {
 	GENERATED_BODY()
 
 public:
+	//override UAbilitySystemComponent
+	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 	virtual void BeginDestroy() override;
-
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+
+	//override IExAbilityProvider
+	virtual void CollectAbilitCases(TArray<FExAbilityCase>& Abilities) const override;
+
+	//对Ability Provider的操作
+	virtual void RegisterAbilityProvider(IExAbilityProvider* ProviderObject);
+	virtual void UnregisterAbilityProvider(IExAbilityProvider* ProviderObject);
+
+	//通过Case找Spec
+	FGameplayAbilitySpec* FindAbilitySpecFromCase(const FExAbilityCase& AbilityCase);
 
 public:
 
@@ -46,27 +58,14 @@ public:
 	UFUNCTION(Server, reliable, WithValidation)
 		virtual void TryActivateAbilityOnceWithEventData(const FExAbilityCase& AbilityCase, const FGameplayEventData& TriggerEventData, UObject* SourceObj);
 
+	UFUNCTION(BlueprintCallable, Category = ExAbility)
+		void TryActivateAbilityByCase(const FExAbilityCase& AbilityCase);
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Abilites")
+		TArray<FExAbilityCase> DefaultAbilities;
+
 private:
 	FGameplayAbilitySpecHandle GiveAbilityByCaseInternal(const FExAbilityCase& AbilityCase, UObject* AbilityProvider);
-
-
-#pragma region /////////////////////////////////////Code for handling Ability Input ////////////////////////////////////////
-
-public:
-	UFUNCTION(BlueprintCallable)
-	TArray<FGameplayTag> GetInputTags() const
-	{
-		return InputTags;
-	}
-
-protected:
-	virtual int InputTagToIDOrGenerate(const FGameplayTag& InputTag);
-
-protected:
-	UPROPERTY(Replicated)
-		TArray<FGameplayTag> InputTags;
-
-#pragma endregion
-
 
 };

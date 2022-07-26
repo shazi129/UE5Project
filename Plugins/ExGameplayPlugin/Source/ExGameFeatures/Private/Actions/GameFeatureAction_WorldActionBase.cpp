@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/Actions/GameFeatureAction_WorldActionBase.h"
+#include "Actions/GameFeatureAction_WorldActionBase.h"
 #include "GameFeaturesSubsystemSettings.h"
 #include "Engine/Engine.h" // for FWorldContext
-#include "GameFeatures/GameFeaturesWorldManager.h"
+#include "GameFeaturesWorldManager.h"
 
 bool UGameFeatureAction_WorldActionBase::IsWorldHandled(UWorld* InWorld)
 {

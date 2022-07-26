@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/Actions/GameFeatureAction_AddLevelInstances.h"
+#include "Actions/GameFeatureAction_AddLevelInstances.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "GameFeaturesSubsystemSettings.h"
 #include "Engine/AssetManager.h"

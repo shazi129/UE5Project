@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameFeatures/Actions/GameFeatureAction_AddWorldSystem.h"
+#include "Actions/GameFeatureAction_AddWorldSystem.h"
 #include "Engine/AssetManager.h"
 #include "GameFeaturesSubsystemSettings.h"
 
