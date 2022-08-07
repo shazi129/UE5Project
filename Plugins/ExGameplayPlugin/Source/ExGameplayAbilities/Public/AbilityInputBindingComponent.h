@@ -12,7 +12,7 @@ class UAbilitySystemComponent;
 class UEnhancedInputComponent;
 
 USTRUCT()
-struct FAbilityInputBinding
+struct EXGAMEPLAYABILITIES_API FAbilityInputBinding
 {
 	GENERATED_BODY()
 

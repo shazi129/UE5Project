@@ -1,5 +1,6 @@
 #include "ExEditorToolsCommands.h"
-#include "ExEditorToolsGlobalConfig.h"
+#include "ExEditorToolsConfig.h"
+#include "ExEditorToolsModule.h"
 
 #define LOCTEXT_NAMESPACE "FExEditorToolsModule"
 
@@ -11,12 +12,19 @@ void FExEditorToolsCommands::RegisterCommands()
 
 void FExEditorToolsCommands::RegisterConfigCommands()
 {
-	const UExEditorToolsGlobalConfig* Config = GetDefault<UExEditorToolsGlobalConfig>();
-	for (const auto& Define : Config->ExEditorToolsDefines)
+	UExEditorToolsContext* Context = GetMutableDefault<UExEditorToolsConfig>()->GetToolContext();
+	if (Context)
 	{
-		TSharedPtr<FUICommandInfo>& Command = ConfigCommands.Add_GetRef(TSharedPtr<FUICommandInfo>());
-		MakeUICommand_InternalUseOnly(this, Command, TEXT(LOCTEXT_NAMESPACE), *Define.CommandName, *(Define.CommandName + "_ToolTip"),
-			TCHAR_TO_ANSI(*("." + Define.CommandName)), *Define.FriendlyName, *Define.Description, EUserInterfaceActionType::Button, FInputGesture());
+		for (const auto& ToolItem : Context->ToolItems)
+		{
+			TSharedPtr<FUICommandInfo>& Command = ConfigCommands.Add_GetRef(TSharedPtr<FUICommandInfo>());
+			MakeUICommand_InternalUseOnly(this, Command, TEXT(LOCTEXT_NAMESPACE), *ToolItem.CommandName, *(ToolItem.CommandName + "_ToolTip"),
+				TCHAR_TO_ANSI(*("." + ToolItem.CommandName)), *ToolItem.FriendlyName, *ToolItem.Description, EUserInterfaceActionType::Button, FInputGesture());
+		}
+	}
+	else
+	{
+		UE_LOG(LogExEditorTools, Error, TEXT("FExEditorToolsCommands::RegisterConfigCommands error, Cannot find Editor tool Context"));
 	}
 }
 

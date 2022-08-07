@@ -30,7 +30,6 @@ void UGameFeatureAction_WorldActionBase::AddHandledWorld(UWorld* InWorld)
 		return;
 	}
 
-	//如果有相同实体，那么world改名字了
 	for (int i = 0; i < HandledWorlds.Num(); i++)
 	{
 		if (HandledWorlds[i].WorldEntry == InWorld)
@@ -40,12 +39,27 @@ void UGameFeatureAction_WorldActionBase::AddHandledWorld(UWorld* InWorld)
 		}
 	}
 
-	//
 	FGameFeatureActionWorldInfo* WorldInfo = new (HandledWorlds)FGameFeatureActionWorldInfo();
 	WorldInfo->WorldEntry = InWorld;
 	WorldInfo->WorldName = InWorld->GetName();
 }
 
+
+void UGameFeatureAction_WorldActionBase::RemoveHandledWord(UWorld* InWorld)
+{
+	if (InWorld == nullptr)
+	{
+		return;
+	}
+
+	for (int i = HandledWorlds.Num() - 1; i >= 0; i--)
+	{
+		if (HandledWorlds[i].WorldEntry == InWorld)
+		{
+			HandledWorlds.RemoveAt(i);
+		}
+	}
+}
 
 void UGameFeatureAction_WorldActionBase::OnGameFeatureActivating()
 {
@@ -84,6 +98,12 @@ void UGameFeatureAction_WorldActionBase::HandleWorld(UWorld* InWorld)
 		return;
 	}
 
+	if (!InWorld->IsGameWorld())
+	{
+		UE_LOG(LogTemp, Error, TEXT("UGameFeatureAction_WorldActionBase.HandleWorld, InWorld[%s|%p] is not a game world"), *(InWorld->GetName()), InWorld);
+		return;
+	}
+
 	if (IsWorldHandled(InWorld))
 	{
 		UE_LOG(LogTemp, Error, TEXT("UGameFeatureAction_WorldActionBase.HandleWorld, InWorld[%s|%p] was Handled"), *(InWorld->GetName()), InWorld);
@@ -106,4 +126,5 @@ void UGameFeatureAction_WorldActionBase::OnWorldBeginplay(UWorld* InWorld)
 void UGameFeatureAction_WorldActionBase::OnWorldTearDown(UWorld* InWorld)
 {
 	UE_LOG(LogTemp, Log, TEXT("UGameFeatureAction_WorldActionBase.HandleWorldTearDown[%s], World[%s]"), *(this->GetName()), *(InWorld->GetName()));
+	RemoveHandledWord(InWorld);
 }

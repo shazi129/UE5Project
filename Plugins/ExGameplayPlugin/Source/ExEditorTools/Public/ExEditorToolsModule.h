@@ -6,6 +6,8 @@
 class FToolBarBuilder;
 class FMenuBuilder;
 
+DECLARE_LOG_CATEGORY_EXTERN(LogExEditorTools, Log, All);
+
 class FExEditorToolsModule : public IModuleInterface
 {
 public:
@@ -25,7 +27,7 @@ private:
 
 	TSharedRef<class SDockTab> OnSpawnPluginTab(const class FSpawnTabArgs& SpawnTabArgs);
 
-	void DoConfigButtonAction(int ID);
+	void ExecuteToolAction(int ID);
 
 	TSharedRef<SWidget> FillComboButton(TSharedPtr<class FUICommandList> Commands);
 

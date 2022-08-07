@@ -3,14 +3,15 @@
 using UnrealBuildTool;
 using System.IO;
 
-public class ExGameplayAbilities : ModuleRules
+public class ExUMG : ModuleRules
 {
-	public ExGameplayAbilities(ReadOnlyTargetRules Target) : base(Target)
+	public ExUMG(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
+				// ... add public include paths required here ...
 				Path.Combine(ModuleDirectory, "Public"),
 			}
 		);
@@ -19,7 +20,6 @@ public class ExGameplayAbilities : ModuleRules
 		PrivateIncludePaths.AddRange(
 			new string[] {
 				// ... add other private include paths required here ...
-				Path.Combine(ModuleDirectory, "Private"),
 			}
 		);
 			
@@ -28,12 +28,9 @@ public class ExGameplayAbilities : ModuleRules
 			new string[]
 			{
 				"Core",
-                "GameplayAbilities",
-                "GameplayTags",
-                "GameplayTasks",
-				"ExGameplayLibrary",
-				"EnhancedInput",
-				"ExInputSystem"
+				"GameplayTags",
+				"UMG"
+				// ... add other public dependencies that you statically link with here ...
 			}
 			);
 			

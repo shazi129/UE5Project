@@ -8,12 +8,11 @@ public class ExGameplayPlugin : ModuleRules
 	public ExGameplayPlugin(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
+
 		PublicIncludePaths.AddRange(
-			new string[] {
-				// ... add public include paths required here ...
-				Path.Combine(ModuleDirectory, "Public"),
-			}
+				new string[] {
+					Path.Combine(ModuleDirectory, "Public") 
+				}
 			);
 				
 		
@@ -28,10 +27,9 @@ public class ExGameplayPlugin : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
 				"EnhancedInput",
-				"GameplayAbilities",
 				"ModularGameplay"
+				// ... add other public dependencies that you statically link with here ...
 			}
 			);
 			

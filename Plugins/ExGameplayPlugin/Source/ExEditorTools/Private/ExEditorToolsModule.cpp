@@ -8,11 +8,13 @@
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Text/STextBlock.h"
 #include "ToolMenus.h"
-#include "ExEditorToolsGlobalConfig.h"
-#include "ExEditorToolsActionDefine.h"
+#include "ExEditorToolsConfig.h"
+#include "ExEditorToolsAction.h"
 #include "ISettingsModule.h"
 
 static const FName ExEditorToolsTabName("ExEditorTools");
+
+DEFINE_LOG_CATEGORY(LogExEditorTools);
 
 #define LOCTEXT_NAMESPACE "FExEditorToolsModule"
 
@@ -33,7 +35,7 @@ void FExEditorToolsModule::StartupModule()
 	{
 		PluginCommands->MapAction(
 			FExEditorToolsCommands::Get().ConfigCommands[i],
-			FExecuteAction::CreateRaw(this, &FExEditorToolsModule::DoConfigButtonAction, i),
+			FExecuteAction::CreateRaw(this, &FExEditorToolsModule::ExecuteToolAction, i),
 			FCanExecuteAction());
 	}
 
@@ -84,13 +86,13 @@ TSharedRef<SDockTab> FExEditorToolsModule::OnSpawnPluginTab(const FSpawnTabArgs&
 		];
 }
 
-void FExEditorToolsModule::DoConfigButtonAction(int ID)
+void FExEditorToolsModule::ExecuteToolAction(int Index)
 {
-	const UExEditorToolsGlobalConfig* Config = GetDefault<UExEditorToolsGlobalConfig>();
-	if(Config->ExEditorToolsDefines.IsValidIndex(ID) && Config->ExEditorToolsDefines[ID].Action.TryLoad())
+	UExEditorToolsContext* Context = GetMutableDefault<UExEditorToolsConfig>()->GetToolContext();
+	if (Context && 0 <= Index && Index < Context->ToolItems.Num())
 	{
-		UExEditorActionDefine* Define = Cast<UExEditorActionDefine>(Config->ExEditorToolsDefines[ID].Action.TryLoad());
-		if(Define && Define->Action)
+		UExEditorActionDefine* Define = Cast<UExEditorActionDefine>(Context->ToolItems[Index].Action.TryLoad());
+		if (Define && Define->Action)
 		{
 			Define->Action->DoAction();
 		}
@@ -101,7 +103,7 @@ TSharedRef<SWidget> FExEditorToolsModule::FillComboButton(TSharedPtr<class FUICo
 {
 	FMenuBuilder MenuBuilder(true, Commands);
 
-	const UExEditorToolsGlobalConfig* EditorConfig = GetDefault<UExEditorToolsGlobalConfig>();
+	const UExEditorToolsConfig* EditorConfig = GetDefault<UExEditorToolsConfig>();
 	for (int i = 0; i < FExEditorToolsCommands::Get().ConfigCommands.Num(); ++i)
 	{
 			MenuBuilder.AddMenuEntry(FExEditorToolsCommands::Get().ConfigCommands[i], NAME_None, TAttribute<FText>(), TAttribute<FText>());
@@ -161,7 +163,7 @@ void FExEditorToolsModule::RegisterSettings()
 		SettingModule->RegisterSettings("Project", "Plugins", "ExEditorTools",
 			LOCTEXT("ExEditorToolsSettings", "ExEditorToolsSettings"),
 			LOCTEXT("ExEditorToolsSettings", "Configure editor buttons."),
-			GetMutableDefault<UExEditorToolsGlobalConfig>());
+			GetMutableDefault<UExEditorToolsConfig>());
 	}
 }
 

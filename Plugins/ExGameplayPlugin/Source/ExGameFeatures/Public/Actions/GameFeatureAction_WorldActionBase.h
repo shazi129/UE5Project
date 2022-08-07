@@ -44,7 +44,9 @@ private:
 
 	bool IsWorldHandled(UWorld* InWorld);
 	void HandleWorld(UWorld* InWorld);
+
 	void AddHandledWorld(UWorld* InWorld);
+	void RemoveHandledWord(UWorld* InWorld);
 
 private:
 	FDelegateHandle GameInstanceStartHandle;
