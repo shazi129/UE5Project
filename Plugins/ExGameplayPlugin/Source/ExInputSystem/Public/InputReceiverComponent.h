@@ -16,7 +16,7 @@ struct EXINPUTSYSTEM_API FInputHandleResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 		bool IsHandled = false;
 };
 
@@ -27,11 +27,14 @@ struct EXINPUTSYSTEM_API FInputHandleEvent
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FGameplayTag InputTag;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FInputHandleDelegate InputHandleDelegate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int Priority = 0;
 };
 
 

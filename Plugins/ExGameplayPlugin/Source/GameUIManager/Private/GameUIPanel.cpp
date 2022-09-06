@@ -80,7 +80,7 @@ UGameUIPopLayout* UGameUIPanel::ShowPopLayout(TSubclassOf<UUserWidget> PopClass,
 	//如果没有设置，就加载一个默认模板
 	if (PopTemplateClass == nullptr)
 	{
-		FString defaultPath = TEXT("Blueprint'/GameUIManager/Template/WB_PopTemplate.WB_PopTemplate_C'");
+		FString defaultPath = TEXT("Blueprint'/ExGameplayPlugin/Template/WB_PopTemplate.WB_PopTemplate_C'");
 		UClass* defaultCls = LoadClass<UGameUIPopLayout>(this, *defaultPath);
 		if (defaultCls != nullptr)
 		{

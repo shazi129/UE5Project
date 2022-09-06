@@ -7,6 +7,7 @@
 #include "Engine/InputDelegateBinding.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
+#include "ExInputSystemModule.h"
 
 void UPlayerControlsComponent::OnRegister()
 {
@@ -52,7 +53,7 @@ void UPlayerControlsComponent::OnPawnRestarted(APawn* Pawn)
 	{
 		ReleaseInputComponent();
 
-		if (Pawn->InputComponent)
+		if (Pawn->InputComponent && SetupInputWhenPawnStart)
 		{
 			SetupInputComponent(Pawn);
 		}
@@ -68,35 +69,76 @@ void UPlayerControlsComponent::OnControllerChanged(APawn* Pawn, AController* Old
 	}
 }
 
+int UPlayerControlsComponent::BindAction(const FInputBindingConfig& BindingConfig)
+{
+	if (InputComponent == nullptr)
+	{
+		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, Input Component is null"));
+		return -1;
+	}
+
+	FEnhancedInputActionEventBinding& Binding = InputComponent->BindAction(
+		BindingConfig.InputAction,
+		BindingConfig.TriggerEvent,
+		BindingConfig.InputHandler,
+		&UInputBindingActionHandler::NativeExecute);
+
+	int BindingHandle = Binding.GetHandle();
+	BindingActionHandles.AddUnique(BindingHandle);
+
+	return BindingHandle;
+}
+
+bool UPlayerControlsComponent::UnbindAction(int BindingHandle)
+{
+	if (InputComponent == nullptr)
+	{
+		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, Input Component is null"));
+		return false;
+	}
+
+	bool Result = InputComponent->RemoveBindingByHandle(BindingHandle);
+	if (Result)
+	{
+		BindingActionHandles.Remove(BindingHandle);
+	}
+	else
+	{
+		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, RemoveBindingByHandle return false"));
+	}
+
+	return Result;
+}
+
 void UPlayerControlsComponent::SetupInputComponent(APawn* Pawn)
 {
 	InputComponent = CastChecked<UEnhancedInputComponent>(Pawn->InputComponent);
-
-	if (ensureMsgf(InputComponent, TEXT("Project must use EnhancedInputComponent to support PlayerControlsComponent")))
+	if (InputComponent == nullptr)
 	{
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = GetEnhancedInputSubsystem();
-		check(Subsystem);
-
-		if (InputMappingContext)
-		{
-			Subsystem->AddMappingContext(InputMappingContext, InputPriority);
-		}
-
-		for (int i = 0; i < BindingActionConfig.Num(); i++)
-		{
-			FInputBindingConfig& ConfigItem = BindingActionConfig[i];
-			if (ConfigItem.InputAction && ConfigItem.InputHandler)
-			{
-				InputComponent->BindAction(
-					ConfigItem.InputAction,
-					ConfigItem.TriggerEvent,
-					ConfigItem.InputHandler,
-					&UInputBindingActionHandler::NativeExecute);
-			}
-		}
-
-		SetupPlayerControls(InputComponent);
+		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::SetupInputComponent error, Project must use EnhancedInputComponent to support PlayerControlsComponent"));
+		return;
 	}
+
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = GetEnhancedInputSubsystem();
+	check(Subsystem);
+
+	if (InputMappingContext)
+	{
+		Subsystem->AddMappingContext(InputMappingContext, InputPriority);
+	}
+
+	for (int i = 0; i < BindingActionConfig.Num(); i++)
+	{
+		FInputBindingConfig& ConfigItem = BindingActionConfig[i];
+		if (ConfigItem.InputAction && ConfigItem.InputHandler)
+		{
+			ConfigItem.InputHandler->SetControlsComponent(this);
+			BindAction(ConfigItem);
+		}
+	}
+
+	isRegister = true;
+	SetupPlayerControls(InputComponent);
 }
 
 void UPlayerControlsComponent::ReleaseInputComponent(AController* OldController)
@@ -105,6 +147,11 @@ void UPlayerControlsComponent::ReleaseInputComponent(AController* OldController)
 	if (Subsystem && InputComponent)
 	{
 		TeardownPlayerControls(InputComponent);
+
+		for (int i = 0; i < BindingActionHandles.Num(); i++)
+		{
+			UnbindAction(BindingActionHandles[i]);
+		}
 
 		if (InputMappingContext)
 		{

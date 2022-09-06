@@ -4,6 +4,8 @@
 #include "ExGameplayAbilitiesModule.h"
 #include "ExGameplayLibrary.h"
 #include "ExAbilityProvider.h"
+#include "AbilitySystemGlobals.h"
+#include "GameplayCueManager.h"
 
 void UExAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
 {
@@ -30,7 +32,7 @@ void UExAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//ÊÕ¼¯OwnerÉíÉÏµÄAbility
+	//ï¿½Õ¼ï¿½Ownerï¿½ï¿½ï¿½Ïµï¿½Ability
 	const TSet<UActorComponent*>& OwnedComponents = GetOwner()->GetComponents();
 	for (UActorComponent* Component : OwnedComponents)
 	{
@@ -156,7 +158,7 @@ FGameplayAbilitySpecHandle UExAbilitySystemComponent::GiveAbilityByCaseInternal(
 
 void UExAbilitySystemComponent::TryActivateAbilityOnceWithEventData_Implementation(const FExAbilityCase& AbilityCase, const FGameplayEventData& TriggerEventData, UObject* SourceObj)
 {
-	//Í¨¹ýclass ÕÒµ½handler
+	//Í¨ï¿½ï¿½class ï¿½Òµï¿½handler
 	FGameplayAbilitySpec* Spec = FindAbilitySpecFromCase(AbilityCase);
 	if (Spec && Spec->Handle.IsValid())
 	{
@@ -189,3 +191,42 @@ void UExAbilitySystemComponent::TryActivateAbilityByCase(const FExAbilityCase& A
 	
 }
 
+void UExAbilitySystemComponent::ExecuteGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters & GameplayCueParameters)
+{
+	UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCue(GetOwner(), GameplayCueTag, EGameplayCueEvent::Type::Executed, GameplayCueParameters);
+}
+
+void UExAbilitySystemComponent::AddGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters & GameplayCueParameters)
+{
+	UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCue(GetOwner(), GameplayCueTag, EGameplayCueEvent::Type::OnActive, GameplayCueParameters);
+	UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCue(GetOwner(), GameplayCueTag, EGameplayCueEvent::Type::WhileActive, GameplayCueParameters);
+}
+
+void UExAbilitySystemComponent::RemoveGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters & GameplayCueParameters)
+{
+	UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCue(GetOwner(), GameplayCueTag, EGameplayCueEvent::Type::Removed, GameplayCueParameters);
+}
+
+void UExAbilitySystemComponent::ClientPlayMontage_Implementation(
+		UGameplayAbility* AnimatingAbility,
+		FGameplayAbilityActivationInfo ActivationInfo,
+		UAnimMontage* Montage, float InPlayRate,
+		FName StartSectionName, float StartTimeSeconds)
+{
+	//åªåœ¨ä¸»æŽ§ç«¯æ’­æ”¾
+	ENetRole OwnerRole = GetOwner()->GetLocalRole();
+	if (OwnerRole == ENetRole::ROLE_AutonomousProxy)
+	{
+		PlayMontage(AnimatingAbility, ActivationInfo, Montage, InPlayRate, StartSectionName, StartTimeSeconds);
+	}
+}
+
+
+void  UExAbilitySystemComponent::ClientStopMontage_Implementation()
+{
+	ENetRole OwnerRole = GetOwner()->GetLocalRole();
+	if (OwnerRole == ENetRole::ROLE_AutonomousProxy)
+	{
+		CurrentMontageStop();
+	}
+}

@@ -28,7 +28,8 @@ public class ExGameplayPlugin : ModuleRules
 			{
 				"Core",
 				"EnhancedInput",
-				"ModularGameplay"
+				"ModularGameplay",
+				"Niagara"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

@@ -39,3 +39,40 @@ struct TStructOpsTypeTraits<FGameplayAbilityTargetData_Int64Array> : public TStr
 		WithNetSerializer = true
 	};
 };
+
+
+USTRUCT(BlueprintType)
+struct EXGAMEPLAYABILITIES_API FGameplayAbilityTargetData_FVectorArray : public FGameplayAbilityTargetData
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<FVector> FVectorArray;
+
+	virtual UScriptStruct* GetScriptStruct() const override
+	{
+		return FGameplayAbilityTargetData_Int64Array::StaticStruct();
+	}
+
+	virtual FString ToString() const override {
+		return TEXT("FGameplayAbilityTargetData_FVectorArray");
+	}
+
+	bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
+	{
+		SafeNetSerializeTArray_Default<32>(Ar, FVectorArray);
+		bOutSuccess = true;
+		return true;
+	}
+};
+
+
+template<>
+struct TStructOpsTypeTraits<FGameplayAbilityTargetData_FVectorArray> : public TStructOpsTypeTraitsBase2<FGameplayAbilityTargetData_FVectorArray>
+{
+	enum {
+		WithNetSerializer = true
+	};
+};

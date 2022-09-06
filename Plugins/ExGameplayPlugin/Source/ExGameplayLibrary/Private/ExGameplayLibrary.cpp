@@ -96,28 +96,39 @@ FString UExGameplayLibrary::FormatLeftTime(int64 Seconds, int Segments, FString 
 	return FString::Format(*FromatString, TimeValues);
 }
 
-bool UExGameplayLibrary::ExecCommand(const UObject* WorldContextObject, const FString& Command)
+bool UExGameplayLibrary::ExecCommand(const FString& Command)
 {
-	if (WorldContextObject == nullptr)
+	if (!GEngine)
 	{
-		UE_LOG(LogExGameplayLibrary, Error, TEXT("UExGameplayLibrary::ExecCommand error, WorldContextObject is null"));
+		UE_LOG(LogExGameplayLibrary, Error, TEXT("UExGameplayLibrary::ExecCommand error, GEngine is Null"));
 		return false;
 	}
 
-	UWorld* World = WorldContextObject->GetWorld();
-	if (World == nullptr)
+	UWorld* World = nullptr;
+
+	ULocalPlayer* Player = GEngine->GetDebugLocalPlayer();
+	if (Player)
 	{
-		UE_LOG(LogExGameplayLibrary, Error, TEXT("UExGameplayLibrary::ExecCommand error, World is null"));
-		return false;
+		World = Player->GetWorld();
+		if (World)
+		{
+			if (Player->Exec(World, *Command, *GLog))
+			{
+				return true;
+			}
+		}
+		else
+		{
+			UE_LOG(LogExGameplayLibrary, Error, TEXT("UExGameplayLibrary::ExecCommand error, PlayerWorld is Null"));
+			return false;
+		}
 	}
 
-	UEngine* Engine = UGameplayStatics::GetGameInstance(WorldContextObject)->GetEngine();
-	if (Engine == nullptr)
+	if (!World)
 	{
-		UE_LOG(LogExGameplayLibrary, Error, TEXT("UExGameplayLibrary::ExecCommand error, Engine is null"));
-		return false;
+		World = GEngine->GetWorld();
 	}
-	return Engine->Exec(World, *Command);
+	return GEngine->Exec(World, *Command);
 }
 
 FString UExGameplayLibrary::GetLogPrefix(const UObject* WorldContextObject)
@@ -304,4 +315,27 @@ void UExGameplayLibrary::SetPostProcessingSSAO(const UObject* WorldContextObject
 			}
 		}
 	}
+}
+
+bool UExGameplayLibrary::IsActorHidden(AActor* Actor)
+{
+	if (Actor)
+	{
+		return Actor->IsHidden();
+	}
+	return false;
+}
+
+bool UExGameplayLibrary::IsA(UObject* Object, UClass* Class)
+{
+	if (Object == nullptr)
+	{
+		return false;
+	}
+	return Object->IsA(Class);
+}
+
+UObject* UExGameplayLibrary::StaticLoadObject(UClass* Class, UObject* InOuter, const FString& Name)
+{
+	return ::StaticLoadObject(Class, InOuter, *Name);
 }

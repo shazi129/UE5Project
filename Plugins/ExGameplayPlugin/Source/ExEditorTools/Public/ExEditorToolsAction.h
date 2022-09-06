@@ -13,7 +13,7 @@ public:
 	UExEditorAction* Action;
 };
 
-UCLASS(BlueprintType, EditInlineNew)
+UCLASS(BlueprintType, EditInlineNew, Abstract)
 class EXEDITORTOOLS_API UExEditorAction : public UObject
 {
 	GENERATED_BODY()
@@ -28,6 +28,18 @@ class EXEDITORTOOLS_API UExEditorAction_OpenWidget : public UExEditorAction
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (AllowedClasses = "EditorUtilityWidgetBlueprint"))
 	FSoftObjectPath WidgetBlueprintPath;
+
+public:
+	virtual void DoAction() const override;
+};
+
+UCLASS(BlueprintType, EditInlineNew)
+class EXEDITORTOOLS_API UExEditorAction_RunBlueprint: public UExEditorAction
+{
+	GENERATED_BODY()
+protected:
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (AllowedClasses = "EditorUtilityBlueprint"))
+		FSoftObjectPath UtilityBlueprintPath;
 
 public:
 	virtual void DoAction() const override;

@@ -40,11 +40,11 @@ public:
 	//override IExAbilityProvider
 	virtual void CollectAbilitCases(TArray<FExAbilityCase>& Abilities) const override;
 
-	//¶ÔAbility ProviderµÄ²Ù×÷
+	//ï¿½ï¿½Ability Providerï¿½Ä²ï¿½ï¿½ï¿½
 	virtual void RegisterAbilityProvider(IExAbilityProvider* ProviderObject);
 	virtual void UnregisterAbilityProvider(IExAbilityProvider* ProviderObject);
 
-	//Í¨¹ýCaseÕÒSpec
+	//Í¨ï¿½ï¿½Caseï¿½ï¿½Spec
 	FGameplayAbilitySpec* FindAbilitySpecFromCase(const FExAbilityCase& AbilityCase);
 
 public:
@@ -55,11 +55,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = ExAbility)
 		FGameplayAbilitySpecHandle GiveAbilityByCase(const FExAbilityCase& AbilityCase, UObject* AbilityProvider = nullptr);
 
-	UFUNCTION(Server, reliable, WithValidation)
+	UFUNCTION(BlueprintCallable, Server, reliable, WithValidation)
 		virtual void TryActivateAbilityOnceWithEventData(const FExAbilityCase& AbilityCase, const FGameplayEventData& TriggerEventData, UObject* SourceObj);
 
 	UFUNCTION(BlueprintCallable, Category = ExAbility)
 		void TryActivateAbilityByCase(const FExAbilityCase& AbilityCase);
+
+	UFUNCTION(BlueprintCallable, Category = "GameplayCue", Meta = (AutoCreateRefTerm = "GameplayCueParameters", GameplayTagFilter = "GameplayCue"))
+		void ExecuteGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters);
+
+	UFUNCTION(BlueprintCallable, Category = "GameplayCue", Meta = (AutoCreateRefTerm = "GameplayCueParameters", GameplayTagFilter = "GameplayCue"))
+		void AddGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters);
+
+	UFUNCTION(BlueprintCallable, Category = "GameplayCue", Meta = (AutoCreateRefTerm = "GameplayCueParameters", GameplayTagFilter = "GameplayCue"))
+		void RemoveGameplayCueLocal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters);
+
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+		void ClientPlayMontage(UGameplayAbility* AnimatingAbility, FGameplayAbilityActivationInfo ActivationInfo, UAnimMontage* Montage, float InPlayRate, FName StartSectionName = NAME_None, float StartTimeSeconds = 0.0f);
+
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+		void ClientStopMontage();
+
 
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Abilites")

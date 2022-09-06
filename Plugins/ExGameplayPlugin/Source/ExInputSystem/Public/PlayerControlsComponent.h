@@ -25,6 +25,16 @@ public:
 	virtual void OnUnregister() override;
 	//~ End UActorComponent interface
 
+	UFUNCTION(BlueprintCallable)
+		int BindAction(const FInputBindingConfig& BindingConfig);
+
+	UFUNCTION(BlueprintCallable)
+		bool UnbindAction(int BindingHandle);
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Controls")
+	bool SetupInputWhenPawnStart = true;
+
 	/** Input mapping to add to the input system */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Controls")
 	UInputMappingContext* InputMappingContext = nullptr;
@@ -35,6 +45,8 @@ public:
 	/** Priority to bind mapping context with */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Controls")
 	int InputPriority = 0;
+
+	bool isRegister = false;
 
 protected:
 	
@@ -71,7 +83,14 @@ protected:
 	virtual void ReleaseInputComponent(AController* OldController = nullptr);
 	UEnhancedInputLocalPlayerSubsystem* GetEnhancedInputSubsystem(AController* OldController = nullptr) const;
 
+protected:
+
 	/** The bound input component. */
 	UPROPERTY(transient)
 	UEnhancedInputComponent* InputComponent;
+
+	UPROPERTY()
+	TArray<int> BindingActionHandles;
+
+
 };

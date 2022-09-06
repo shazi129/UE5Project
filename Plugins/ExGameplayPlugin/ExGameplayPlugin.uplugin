@@ -21,6 +21,11 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "GameUIManager",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "ExGameplayAbilities",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -31,7 +36,12 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "GameUIManager",
+			"Name": "ExInputSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "ExUMG",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
@@ -52,15 +62,11 @@
 			"Enabled": true
 		},
 		{
-			"Name": "ModularGameplay",
-			"Enabled": true
-		},
-		{
-			"Name": "GameFeatures",
-			"Enabled": true
-		},
-		{
 			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "ModularGameplay",
 			"Enabled": true
 		}
 	]

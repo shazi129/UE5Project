@@ -43,7 +43,7 @@ UGameUIPanel* UGameUIManager::FindOrCreateUIPanel(TSubclassOf<UUserWidget> widge
 	//如果没有设置，就加载一个默认模板
 	if (PanelTemplateCls == nullptr)
 	{
-		FString defaultPath = TEXT("Blueprint'/GameUIManager/Template/WB_PanelTemplate.WB_PanelTemplate_C'");
+		FString defaultPath = TEXT("Blueprint'/ExGameplayPlugin/Template/WB_PanelTemplate.WB_PanelTemplate_C'");
 		UClass* defaultCls = LoadClass<UGameUIPanel>(this, *defaultPath);
 		if (defaultCls != nullptr)
 		{

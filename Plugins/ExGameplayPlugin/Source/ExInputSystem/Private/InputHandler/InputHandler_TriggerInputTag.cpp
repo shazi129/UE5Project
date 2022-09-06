@@ -4,7 +4,7 @@
 #include "ExInputSystemModule.h"
 #include "InputReceiverComponent.h"
 
-void UInputHandler_TriggerInptuTag::NativeExecute(const FInputActionValue& inputValue)
+void UInputHandler_TriggerInptutTag::NativeExecute(const FInputActionValue& inputValue)
 {
 	if (!InputTag.IsValid())
 	{
