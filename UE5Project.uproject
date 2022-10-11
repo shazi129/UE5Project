@@ -37,6 +37,10 @@
 		{
 			"Name": "ExGameplayPlugin",
 			"Enabled": true
+		},
+		{
+			"Name": "TestAction",
+			"Enabled": true
 		}
 	]
 }

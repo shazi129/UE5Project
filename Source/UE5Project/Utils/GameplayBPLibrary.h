@@ -7,4 +7,8 @@ UCLASS()
 class UGameplayBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "GameplayBPLibrary")
+		static void PrintMenuPath();
 };
