@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InputBindingAction.h"
 #include "EnhancedInputComponent.h"
 #include "InputTriggers.h"
+#include "ExInputTypes.h"
 #include "Components/PawnComponent.h"
 #include "PlayerControlsComponent.generated.h"
 
@@ -25,38 +25,25 @@ public:
 	virtual void OnUnregister() override;
 	//~ End UActorComponent interface
 
-	UFUNCTION(BlueprintCallable)
-		int BindAction(const FInputBindingConfig& BindingConfig);
-
-	UFUNCTION(BlueprintCallable)
-		bool UnbindAction(int BindingHandle);
-
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Controls")
-	bool SetupInputWhenPawnStart = true;
+		bool SetupInputWhenPawnStart = true;
 
-	/** Input mapping to add to the input system */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Controls")
-	UInputMappingContext* InputMappingContext = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Controls")
-	TArray<FInputBindingConfig> BindingActionConfig;
-
-	/** Priority to bind mapping context with */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Controls")
-	int InputPriority = 0;
+	/*∞Û∂® ‰»Î≈‰÷√*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Controls")
+		FInputMappingConfig InputMappingConfig;
 
 	bool isRegister = false;
 
 protected:
-	
+
 	/** Native/BP Event to set up player controls */
 	UFUNCTION(BlueprintNativeEvent, Category = "Player Controls")
-	void SetupPlayerControls(UEnhancedInputComponent* PlayerInputComponent);
+		void SetupPlayerControls(UEnhancedInputComponent* PlayerInputComponent);
 
 	/** Native/BP Event to undo control setup */
 	UFUNCTION(BlueprintNativeEvent, Category = "Player Controls")
-	void TeardownPlayerControls(UEnhancedInputComponent* PlayerInputComponent);
+		void TeardownPlayerControls(UEnhancedInputComponent* PlayerInputComponent);
 
 	/** Wrapper function for binding to this input component */
 	template<class UserClass, typename FuncType>
@@ -70,14 +57,14 @@ protected:
 
 		return false;
 	}
-	
-	/** Called when pawn restarts, bound to dynamic delegate */
-	UFUNCTION()
-	virtual void OnPawnRestarted(APawn* Pawn);
 
 	/** Called when pawn restarts, bound to dynamic delegate */
 	UFUNCTION()
-	virtual void OnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController);
+		virtual void OnPawnRestarted(APawn* Pawn);
+
+	/** Called when pawn restarts, bound to dynamic delegate */
+	UFUNCTION()
+		virtual void OnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController);
 
 	virtual void SetupInputComponent(APawn* Pawn);
 	virtual void ReleaseInputComponent(AController* OldController = nullptr);
@@ -87,10 +74,8 @@ protected:
 
 	/** The bound input component. */
 	UPROPERTY(transient)
-	UEnhancedInputComponent* InputComponent;
+		UEnhancedInputComponent* InputComponent;
 
 	UPROPERTY()
-	TArray<int> BindingActionHandles;
-
-
+		FInputMappingResult InputMappingResult;
 };

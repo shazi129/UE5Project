@@ -8,6 +8,7 @@
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
 #include "ExInputSystemModule.h"
+#include "ExInputLibrary.h"
 
 void UPlayerControlsComponent::OnRegister()
 {
@@ -69,47 +70,6 @@ void UPlayerControlsComponent::OnControllerChanged(APawn* Pawn, AController* Old
 	}
 }
 
-int UPlayerControlsComponent::BindAction(const FInputBindingConfig& BindingConfig)
-{
-	if (InputComponent == nullptr)
-	{
-		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, Input Component is null"));
-		return -1;
-	}
-
-	FEnhancedInputActionEventBinding& Binding = InputComponent->BindAction(
-		BindingConfig.InputAction,
-		BindingConfig.TriggerEvent,
-		BindingConfig.InputHandler,
-		&UInputBindingActionHandler::NativeExecute);
-
-	int BindingHandle = Binding.GetHandle();
-	BindingActionHandles.AddUnique(BindingHandle);
-
-	return BindingHandle;
-}
-
-bool UPlayerControlsComponent::UnbindAction(int BindingHandle)
-{
-	if (InputComponent == nullptr)
-	{
-		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, Input Component is null"));
-		return false;
-	}
-
-	bool Result = InputComponent->RemoveBindingByHandle(BindingHandle);
-	if (Result)
-	{
-		BindingActionHandles.Remove(BindingHandle);
-	}
-	else
-	{
-		EXINPUTSYSTEM_LOG(Error, TEXT("UPlayerControlsComponent::BindAction error, RemoveBindingByHandle return false"));
-	}
-
-	return Result;
-}
-
 void UPlayerControlsComponent::SetupInputComponent(APawn* Pawn)
 {
 	InputComponent = CastChecked<UEnhancedInputComponent>(Pawn->InputComponent);
@@ -120,24 +80,8 @@ void UPlayerControlsComponent::SetupInputComponent(APawn* Pawn)
 	}
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = GetEnhancedInputSubsystem();
-	check(Subsystem);
+	InputMappingResult = UExInputLibrary::AddInputMappingConfig(InputMappingConfig, InputComponent, Subsystem, this);
 
-	if (InputMappingContext)
-	{
-		Subsystem->AddMappingContext(InputMappingContext, InputPriority);
-	}
-
-	for (int i = 0; i < BindingActionConfig.Num(); i++)
-	{
-		FInputBindingConfig& ConfigItem = BindingActionConfig[i];
-		if (ConfigItem.InputAction && ConfigItem.InputHandler)
-		{
-			ConfigItem.InputHandler->SetControlsComponent(this);
-			BindAction(ConfigItem);
-		}
-	}
-
-	isRegister = true;
 	SetupPlayerControls(InputComponent);
 }
 
@@ -148,15 +92,7 @@ void UPlayerControlsComponent::ReleaseInputComponent(AController* OldController)
 	{
 		TeardownPlayerControls(InputComponent);
 
-		for (int i = 0; i < BindingActionHandles.Num(); i++)
-		{
-			UnbindAction(BindingActionHandles[i]);
-		}
-
-		if (InputMappingContext)
-		{
-			Subsystem->RemoveMappingContext(InputMappingContext);
-		}
+		UExInputLibrary::RemoveInputMappingConfig(InputMappingResult, InputComponent, Subsystem);
 	}
 	InputComponent = nullptr;
 }

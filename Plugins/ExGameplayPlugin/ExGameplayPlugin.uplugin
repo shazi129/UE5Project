@@ -68,6 +68,10 @@
 		{
 			"Name": "ModularGameplay",
 			"Enabled": true
+		},
+		{
+			"Name": "GameFeatures",
+			"Enabled": true
 		}
 	]
 }

@@ -4,42 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "InputInteractComponent.h"
-#include "InputReceiverComponent.generated.h"
+#include "Components/InteractItemComponent.h"
+#include "InteractManagerComponent.generated.h"
 
 
 /**
 *  挂在Character身上，管理交互数据
 */
-USTRUCT(BlueprintType)
-struct EXINPUTSYSTEM_API FInputHandleResult
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadWrite)
-		bool IsHandled = false;
-};
-
-DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(FInputHandleResult, FInputHandleDelegate, const FGameplayTag&, InputTag);
-
-USTRUCT(BlueprintType)
-struct EXINPUTSYSTEM_API FInputHandleEvent
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FGameplayTag InputTag;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FInputHandleDelegate InputHandleDelegate;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int Priority = 0;
-};
-
-
 UCLASS(Blueprintable, ClassGroup = (Interact), meta = (BlueprintSpawnableComponent))
-class EXINPUTSYSTEM_API UInputReceiverComponent : public UActorComponent
+class EXGAMEPLAYPLUGIN_API UInteractManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -51,13 +24,13 @@ public:
 
 public:
 	// Sets default values for this component's properties
-	UInputReceiverComponent();
+	UInteractManagerComponent();
 
 	virtual void BeginPlay() override;
 
-	FInteractData* FindItem(UInputInteractComponent* Component, const FGameplayTag& InteractType);
+	FInteractData* FindItem(UInteractItemComponent* Component, const FGameplayTag& InteractType);
 
-	FInteractData* FindOrAddItem(UInputInteractComponent* Component, const FGameplayTag& InteractType);
+	FInteractData* FindOrAddItem(UInteractItemComponent* Component, const FGameplayTag& InteractType);
 
 	//整个响应系统是否可用
 	UFUNCTION(BlueprintCallable)
@@ -68,14 +41,14 @@ public:
 
 	//某个响应项是否可用
 	UFUNCTION(BlueprintCallable)
-		void SetItemEnable(UInputInteractComponent* Component, const FGameplayTag& InteractType, bool Enable);
+		void SetItemEnable(UInteractItemComponent* Component, const FGameplayTag& InteractType, bool Enable);
 
 	//某个component的所有响应项是否可用
 	UFUNCTION(BlueprintCallable)
-		void SetComponentEnable(UInputInteractComponent* Component, bool Enable);
+		void SetComponentEnable(UInteractItemComponent* Component, bool Enable);
 
 	UFUNCTION(BlueprintCallable)
-		bool GetItemEnable(UInputInteractComponent* Component, const FGameplayTag& InteractType);
+		bool GetItemEnable(UInteractItemComponent* Component, const FGameplayTag& InteractType);
 
 	UFUNCTION(BlueprintCallable)
 		bool ReceiveInput(const FGameplayTag& InputTag);

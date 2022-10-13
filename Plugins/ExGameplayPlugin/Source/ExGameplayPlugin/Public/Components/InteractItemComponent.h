@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GameplayTags.h"
-#include "InputInteractComponent.generated.h"
+#include "InteractItemComponent.generated.h"
 
 //交互行为类型
 UENUM(BlueprintType)
@@ -35,7 +35,7 @@ enum EInteractRole
 };
 
 USTRUCT(BlueprintType)
-struct EXINPUTSYSTEM_API FInteractRange
+struct EXGAMEPLAYPLUGIN_API FInteractRange
 {
 	GENERATED_BODY()
 
@@ -54,13 +54,13 @@ struct EXINPUTSYSTEM_API FInteractRange
 
 //配置数据，用于在蓝图中配置，一般运行时不做修改
 USTRUCT(BlueprintType)
-struct EXINPUTSYSTEM_API FInteractConfigData
+struct EXGAMEPLAYPLUGIN_API FInteractConfigData
 {
 	GENERATED_BODY()
 
-		//交互物体类型
-		UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FGameplayTag InteractType;
+	//交互物体类型
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag InteractType;
 
 	//交互优先级
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -99,17 +99,17 @@ struct EXINPUTSYSTEM_API FInteractConfigData
 		bool Enable = true;
 };
 
-class UInputInteractComponent;
+class UInteractItemComponent;
 
 //交互数据，用于各种操作
 USTRUCT(BlueprintType)
-struct EXINPUTSYSTEM_API FInteractData
+struct EXGAMEPLAYPLUGIN_API FInteractData
 {
 	GENERATED_BODY()
 
-		FInteractData() = default;
+	FInteractData() = default;
 
-	FInteractData(AActor* Initiator, UInputInteractComponent* InteractComponent, const FGameplayTag& InteractType);
+	FInteractData(AActor* Initiator, UInteractItemComponent* InteractComponent, const FGameplayTag& InteractType);
 
 	//交互发起人
 	UPROPERTY(BlueprintReadOnly)
@@ -117,7 +117,7 @@ struct EXINPUTSYSTEM_API FInteractData
 
 	//交互的组件
 	UPROPERTY(BlueprintReadOnly)
-		TWeakObjectPtr<UInputInteractComponent> InteractItemComponent;
+		TWeakObjectPtr<UInteractItemComponent> InteractItemComponent;
 
 	//本条交互数据对应的交互类型，结合交互组件可以找到相关的配置数据
 	UPROPERTY(BlueprintReadOnly)
@@ -154,7 +154,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, const FInteractData&, I
 */
 
 UCLASS(ClassGroup = (Interact), BlueprintType, Blueprintable, meta = (BlueprintSpawnableComponent))
-class EXINPUTSYSTEM_API UInputInteractComponent : public UActorComponent
+class EXGAMEPLAYPLUGIN_API UInteractItemComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -173,12 +173,12 @@ public:
 
 public:
 	// Sets default values for this component's properties
-	UInputInteractComponent();
+	UInteractItemComponent();
 
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-		class UInputReceiverComponent* GetInteractManagerComponent();
+		class UInteractManagerComponent* GetInteractManagerComponent();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interact Config")

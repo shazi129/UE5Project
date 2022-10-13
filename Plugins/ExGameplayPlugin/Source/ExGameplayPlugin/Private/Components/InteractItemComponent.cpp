@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "InputInteractComponent.h"
-#include "InputReceiverComponent.h"
+#include "Components/InteractItemComponent.h"
+#include "Components/InteractManagerComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "ExGameplayLibrary.h"
 
-FInteractData::FInteractData(AActor* Initiator, UInputInteractComponent* InteractComponent, const FGameplayTag& InteractType)
+FInteractData::FInteractData(AActor* Initiator, UInteractItemComponent* InteractComponent, const FGameplayTag& InteractType)
 	: Initiator(Initiator)
 	, InteractItemComponent(InteractComponent)
 	, InteractType(InteractType)
@@ -16,7 +16,7 @@ FInteractData::FInteractData(AActor* Initiator, UInputInteractComponent* Interac
 	Enable = true;
 }
 
-FInteractConfigData* UInputInteractComponent::GetConfigData(const FGameplayTag& InteractType)
+FInteractConfigData* UInteractItemComponent::GetConfigData(const FGameplayTag& InteractType)
 {
 	for (int i = 0; i < InteractConfigList.Num(); i++)
 	{
@@ -30,16 +30,16 @@ FInteractConfigData* UInputInteractComponent::GetConfigData(const FGameplayTag& 
 
 
 // Sets default values for this component's properties
-UInputInteractComponent::UInputInteractComponent()
+UInteractItemComponent::UInteractItemComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UInputInteractComponent::BeginPlay()
+void UInteractItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UInputReceiverComponent* InteractManagerComponent = GetInteractManagerComponent();
+	UInteractManagerComponent* InteractManagerComponent = GetInteractManagerComponent();
 	if (!InteractManagerComponent)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UInteractItemComponent::UpdateInteractState: cannot get manager"));
@@ -52,7 +52,7 @@ void UInputInteractComponent::BeginPlay()
 	}
 }
 
-UInputReceiverComponent* UInputInteractComponent::GetInteractManagerComponent()
+UInteractManagerComponent* UInteractItemComponent::GetInteractManagerComponent()
 {
 	//只在模拟端运行
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
@@ -81,7 +81,7 @@ UInputReceiverComponent* UInputInteractComponent::GetInteractManagerComponent()
 		return nullptr;
 	}
 
-	UInputReceiverComponent* InteractManagerComponent = Cast<UInputReceiverComponent>(InteractPawn->GetComponentByClass(UInputReceiverComponent::StaticClass()));
+	UInteractManagerComponent* InteractManagerComponent = Cast<UInteractManagerComponent>(InteractPawn->GetComponentByClass(UInteractManagerComponent::StaticClass()));
 	if (!InteractManagerComponent)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UInteractItemComponent::GetInteractManagerComponent: cannot get manager"));
@@ -91,19 +91,19 @@ UInputReceiverComponent* UInputInteractComponent::GetInteractManagerComponent()
 	return InteractManagerComponent;
 }
 
-void UInputInteractComponent::NotifyInteractStateChange(const FInteractData& InteractData)
+void UInteractItemComponent::NotifyInteractStateChange(const FInteractData& InteractData)
 {
 	BP_NotifyInteractStateChange(InteractData);
 
 	OnInteractStateChange.Broadcast(InteractData);
 }
 
-void UInputInteractComponent::BP_NotifyInteractStateChange_Implementation(const FInteractData& InteractData)
+void UInteractItemComponent::BP_NotifyInteractStateChange_Implementation(const FInteractData& InteractData)
 {
 
 }
 
-bool UInputInteractComponent::CanInteract(const FInteractData& InteractData)
+bool UInteractItemComponent::CanInteract(const FInteractData& InteractData)
 {
 	if (CanInteractDelegate.IsBound())
 	{
@@ -113,12 +113,12 @@ bool UInputInteractComponent::CanInteract(const FInteractData& InteractData)
 	return BP_CanInteract(InteractData);
 }
 
-bool UInputInteractComponent::BP_CanInteract_Implementation(const FInteractData& InteractData)
+bool UInteractItemComponent::BP_CanInteract_Implementation(const FInteractData& InteractData)
 {
 	return InteractData.InteractState == E_Interact_Interactive && InteractData.InteractOrder == 0;
 }
 
-bool UInputInteractComponent::OnInteract(const FInteractData& InteractData)
+bool UInteractItemComponent::OnInteract(const FInteractData& InteractData)
 {
 	if (!CanInteract(InteractData))
 	{
@@ -131,12 +131,12 @@ bool UInputInteractComponent::OnInteract(const FInteractData& InteractData)
 	return true;
 }
 
-void UInputInteractComponent::BP_OnInteract_Implementation(const FInteractData& InteractData)
+void UInteractItemComponent::BP_OnInteract_Implementation(const FInteractData& InteractData)
 {
 
 }
 
-void UInputInteractComponent::SetEnable(bool Enable, FGameplayTag InteractType)
+void UInteractItemComponent::SetEnable(bool Enable, FGameplayTag InteractType)
 {
 	ENetRole Role = GetOwner()->GetLocalRole();
 	if (Role == ENetRole::ROLE_Authority)
@@ -149,9 +149,9 @@ void UInputInteractComponent::SetEnable(bool Enable, FGameplayTag InteractType)
 	}
 }
 
-void UInputInteractComponent::InternalSetEnable(bool Enable, FGameplayTag InteractType)
+void UInteractItemComponent::InternalSetEnable(bool Enable, FGameplayTag InteractType)
 {
-	UInputReceiverComponent* ManagerComponent = GetInteractManagerComponent();
+	UInteractManagerComponent* ManagerComponent = GetInteractManagerComponent();
 	if (!ManagerComponent)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UInteractItemComponent::InternalSetEnable: cannot get manager component"));
@@ -161,12 +161,12 @@ void UInputInteractComponent::InternalSetEnable(bool Enable, FGameplayTag Intera
 	ManagerComponent->SetItemEnable(this, InteractType, Enable);
 }
 
-bool UInputInteractComponent::ClientSetEnable_Validate(bool Enable, FGameplayTag InteractType)
+bool UInteractItemComponent::ClientSetEnable_Validate(bool Enable, FGameplayTag InteractType)
 {
 	return true;
 }
 
-void UInputInteractComponent::ClientSetEnable_Implementation(bool Enable, FGameplayTag InteractType)
+void UInteractItemComponent::ClientSetEnable_Implementation(bool Enable, FGameplayTag InteractType)
 {
 	InternalSetEnable(Enable, InteractType);
 }

@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "InputReceiverComponent.h"
+#include "Components/InteractManagerComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "ExGameplayLibrary.h"
 #include "ExInputSubsystem.h"
 
-UInputReceiverComponent::UInputReceiverComponent()
+UInteractManagerComponent::UInteractManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UInputReceiverComponent::BeginPlay()
+void UInteractManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -26,7 +26,7 @@ void UInputReceiverComponent::BeginPlay()
 	}
 }
 
-FInteractData* UInputReceiverComponent::FindItem(UInputInteractComponent* Component, const FGameplayTag& InteractType)
+FInteractData* UInteractManagerComponent::FindItem(UInteractItemComponent* Component, const FGameplayTag& InteractType)
 {
 	for (int i = 0; i < InteractList.Num(); i++)
 	{
@@ -38,7 +38,7 @@ FInteractData* UInputReceiverComponent::FindItem(UInputInteractComponent* Compon
 	return nullptr;
 }
 
-FInteractData* UInputReceiverComponent::FindOrAddItem(UInputInteractComponent* Component, const FGameplayTag& InteractType)
+FInteractData* UInteractManagerComponent::FindOrAddItem(UInteractItemComponent* Component, const FGameplayTag& InteractType)
 {
 	if (!Component)
 	{
@@ -68,7 +68,7 @@ FInteractData* UInputReceiverComponent::FindOrAddItem(UInputInteractComponent* C
 	return InteractData;
 }
 
-void UInputReceiverComponent::UpdateItem(FInteractData& InteractData)
+void UInteractManagerComponent::UpdateItem(FInteractData& InteractData)
 {
 	if (!InteractData.InteractItemComponent.IsValid())
 	{
@@ -190,7 +190,7 @@ void UInputReceiverComponent::UpdateItem(FInteractData& InteractData)
 	InteractData.InteractState = InteractState;
 }
 
-void UInputReceiverComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UInteractManagerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -243,7 +243,7 @@ void UInputReceiverComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	}
 }
 
-void UInputReceiverComponent::SortItems()
+void UInteractManagerComponent::SortItems()
 {
 	InteractOrderList.Sort([](const FInteractData& A, const FInteractData& B)
 		{
@@ -278,17 +278,17 @@ void UInputReceiverComponent::SortItems()
 		});
 }
 
-void UInputReceiverComponent::SetEnable(bool Enable)
+void UInteractManagerComponent::SetEnable(bool Enable)
 {
 	PrimaryComponentTick.bCanEverTick = Enable;
 }
 
-bool UInputReceiverComponent::GetEnable()
+bool UInteractManagerComponent::GetEnable()
 {
 	return PrimaryComponentTick.bCanEverTick;
 }
 
-void UInputReceiverComponent::SetItemEnable(UInputInteractComponent* Component, const FGameplayTag& InteractType, bool Enable)
+void UInteractManagerComponent::SetItemEnable(UInteractItemComponent* Component, const FGameplayTag& InteractType, bool Enable)
 {
 	if (InteractType.IsValid())
 	{
@@ -310,7 +310,7 @@ void UInputReceiverComponent::SetItemEnable(UInputInteractComponent* Component, 
 	}
 }
 
-bool UInputReceiverComponent::GetItemEnable(UInputInteractComponent* Component, const FGameplayTag& InteractType)
+bool UInteractManagerComponent::GetItemEnable(UInteractItemComponent* Component, const FGameplayTag& InteractType)
 {
 	FInteractData* InteractData = FindItem(Component, InteractType);
 	if (InteractData)
@@ -321,7 +321,7 @@ bool UInputReceiverComponent::GetItemEnable(UInputInteractComponent* Component, 
 	return false;
 }
 
-void UInputReceiverComponent::SetComponentEnable(UInputInteractComponent* Component, bool Enable)
+void UInteractManagerComponent::SetComponentEnable(UInteractItemComponent* Component, bool Enable)
 {
 	for (int i = 0; i < InteractList.Num(); i++)
 	{
@@ -332,7 +332,7 @@ void UInputReceiverComponent::SetComponentEnable(UInputInteractComponent* Compon
 	}
 }
 
-bool UInputReceiverComponent::ReceiveInput(const FGameplayTag& InputTag)
+bool UInteractManagerComponent::ReceiveInput(const FGameplayTag& InputTag)
 {
 	UExInputSubsystem * InputSubsystem = UExInputSubsystem::GetInputSubsystem(this);
 	bool IsHandled = InputSubsystem->HandleInputEvent(InputTag).IsHandled;
@@ -374,12 +374,12 @@ bool UInputReceiverComponent::ReceiveInput(const FGameplayTag& InputTag)
 	return IsHandled;
 }
 
-bool UInputReceiverComponent::BP_ReceiveInput_Implementation(const FGameplayTag& InputTag)
+bool UInteractManagerComponent::BP_ReceiveInput_Implementation(const FGameplayTag& InputTag)
 {
 	return false;
 }
 
-void UInputReceiverComponent::ServerInteractItem_Implementation(const FInteractData& InteractData)
+void UInteractManagerComponent::ServerInteractItem_Implementation(const FInteractData& InteractData)
 {
 	bool result = InternalInteractItem(InteractData);
 	if (result)
@@ -388,27 +388,27 @@ void UInputReceiverComponent::ServerInteractItem_Implementation(const FInteractD
 	}
 }
 
-bool UInputReceiverComponent::ServerInteractItem_Validate(const FInteractData& InteractData)
+bool UInteractManagerComponent::ServerInteractItem_Validate(const FInteractData& InteractData)
 {
 	return true;
 }
 
-void UInputReceiverComponent::ClientInteractItem_Implementation(const FInteractData& InteractData)
+void UInteractManagerComponent::ClientInteractItem_Implementation(const FInteractData& InteractData)
 {
 	InternalInteractItem(InteractData);
 }
 
-bool UInputReceiverComponent::ClientInteractItem_Validate(const FInteractData& InteractData)
+bool UInteractManagerComponent::ClientInteractItem_Validate(const FInteractData& InteractData)
 {
 	return true;
 }
 
-bool UInputReceiverComponent::InternalInteractItem(const FInteractData& InteractData)
+bool UInteractManagerComponent::InternalInteractItem(const FInteractData& InteractData)
 {
 	return InteractData.InteractItemComponent->OnInteract(InteractData);
 }
 
-void UInputReceiverComponent::IgnoreVectorAxis(FVector& Vector, EInteractAngleAxis IgnoreAxis)
+void UInteractManagerComponent::IgnoreVectorAxis(FVector& Vector, EInteractAngleAxis IgnoreAxis)
 {
 	if (IgnoreAxis == E_Interact_Angle_X)
 	{
