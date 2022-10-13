@@ -33,7 +33,8 @@ public class ExGameplayPlugin : ModuleRules
 				"ExGameplayLibrary",
 				"ExInputSystem",
 				"GameplayTags",
-				"GameFeatures"
+				"GameFeatures",
+				"GameplayAbilities",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
