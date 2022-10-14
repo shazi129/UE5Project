@@ -1,0 +1,3 @@
+[submodule "Plugins/ExGameplayPlugin"]
+	path = Plugins/ExGameplayPlugin
+	url = https://github.com/shazi129/ExGameplayPlugin.git
