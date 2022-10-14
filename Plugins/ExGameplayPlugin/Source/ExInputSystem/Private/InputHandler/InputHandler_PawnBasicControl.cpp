@@ -1,5 +1,6 @@
 #include "InputHandler/InputHandler_PawnBasicControl.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 
 void UInputHandler_PawnBasicControl::SetSourceObject(UObject* Object)
 {
@@ -79,6 +80,18 @@ void UInputHandler_PawnPitchInput::NativeExecute(const FInputActionValue& inputV
 	if (Pawn && inputValue.GetMagnitude() != 0.0f)
 	{
 		Pawn->AddControllerPitchInput(inputValue.GetMagnitude());
+	}
+}
+
+void UInputHandler_CharacterJump::NativeExecute(const FInputActionValue& inputValue)
+{
+	if (Pawn)
+	{
+		ACharacter* Character = Cast<ACharacter>(Pawn);
+		if (Character)
+		{
+			Character->Jump();
+		}
 	}
 }
 
