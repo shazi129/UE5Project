@@ -16,3 +16,8 @@ UWorld* UInputActionHandler::GetWorld() const
 	EXINPUTSYSTEM_LOG(Warning, TEXT("UInputBindingActionHandler::GetWorld error, SourceObject is null: [%s]"), *GetName());
 	return nullptr;
 }
+
+void UInputActionHandler::SetSourceObject(UObject* Object)
+{
+	SourceObject = Object;
+}

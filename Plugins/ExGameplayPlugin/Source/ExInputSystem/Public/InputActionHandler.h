@@ -29,15 +29,9 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	inline void SetSourceObject(UObject* Object)
-	{
-		SourceObject = Object;
-	}
+	virtual void SetSourceObject(UObject* Object);
 
-private:
-	UPROPERTY()
-		class UPlayerControlsComponent* ControlsComponent;
-
+protected:
 	UPROPERTY()
 	UObject* SourceObject;
 };
