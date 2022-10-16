@@ -13,12 +13,12 @@ public class UE5Project : ModuleRules
 			"CoreUObject",
 			"Engine",
             "UMG",
+            "ExUMG",
 			"InputCore",
 			"GameplayAbilities",
             "GameplayTags",
             "GameplayTasks",
             "ApplicationCore",
-            "GameUIManager",
             "ModularGameplay",
             "GameFeatures",
             "Projects"

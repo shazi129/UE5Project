@@ -1,10 +1,11 @@
 #pragma  once
 
+/*
 #include "ExpandedUserWidgetProxy.h"
 #include "Components/Button.h"
 #include "MainUIProxy.generated.h"
 
-UCLASS()
+// UCLASS()
 class UMainUIProxy : public UExpandedUserWidgetProxy
 {
 	GENERATED_BODY()
@@ -19,3 +20,4 @@ public:
 private:
 	UButton* TestGFBtn;
 };
+*/

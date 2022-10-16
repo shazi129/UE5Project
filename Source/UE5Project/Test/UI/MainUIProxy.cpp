@@ -1,3 +1,4 @@
+/*
 #include "MainUIProxy.h"
 #include "ExpandedUserWidget.h"
 
@@ -26,3 +27,4 @@ void UMainUIProxy::OnTestGFBtnClick()
 {
 	UE_LOG(LogTemp, Log, TEXT("UMainUIProxy::NativeOnInitialized: OnTestGFBtnClick"));
 }
+*/
