@@ -1,3 +1,6 @@
 [submodule "Plugins/ExGameplayPlugin"]
 	path = Plugins/ExGameplayPlugin
 	url = https://github.com/shazi129/ExGameplayPlugin.git
+[submodule "Plugins/ShaderTest"]
+	path = Plugins/ShaderTest
+	url = https://github.com/shazi129/ShaderTest.git
