@@ -41,6 +41,10 @@
 		{
 			"Name": "TestAction",
 			"Enabled": true
+		},
+		{
+			"Name": "RenderDocPlugin",
+			"Enabled": true
 		}
 	]
 }
