@@ -136,6 +136,7 @@ void ATestTypeSystem::DumpStruct(TArray<FString>& content, int dumpLevel)
 
 void ATestTypeSystem::DumpObject(TArray<FString>& content, int dumpLevel)
 {
+	/*
 	AActor* obj = FindObject<AActor>(ANY_PACKAGE, TEXT("TestTypeSystem_1"));
 	UClass* uclass = obj->GetClass();
 	for (TFieldIterator<UProperty>i(uclass); i; ++i)
@@ -167,4 +168,5 @@ void ATestTypeSystem::DumpObject(TArray<FString>& content, int dumpLevel)
 	{
 		content.Add(i->GetName());
 	}
+	*/
 }
