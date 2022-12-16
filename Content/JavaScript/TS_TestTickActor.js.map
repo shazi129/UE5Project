@@ -1,1 +1,0 @@
-{"version":3,"file":"TS_TestTickActor.js","sourceRoot":"","sources":["../../TypeScript/Source/TS_TestTickActor.ts"],"names":[],"mappings":";;AAAA,yBAAyB;AAEzB,MAAM,gBAAiB,SAAQ,EAAE,CAAC,KAAK;IAEnC,WAAW,CAAC,YAAoB;QAE5B,OAAO,CAAC,GAAG,CAAC,mDAAmD,GAAG,YAAY,CAAC,CAAC;IACpF,CAAC;CACJ;AAED,kBAAe,gBAAgB,CAAC"}

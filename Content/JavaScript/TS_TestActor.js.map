@@ -1,1 +1,0 @@
-{"version":3,"file":"TS_TestActor.js","sourceRoot":"","sources":["../../TypeScript/Source/TS_TestActor.ts"],"names":[],"mappings":";;AAAA,yBAAyB;AAEzB,MAAM,YAAa,SAAQ,EAAE,CAAC,KAAK;IAE/B,WAAW,CAAC,YAAoB;QAE5B,OAAO,CAAC,GAAG,CAAC,mBAAmB,GAAG,YAAY,CAAC,CAAC;IACpD,CAAC;CACJ;AAED,kBAAe,YAAY,CAAC"}
