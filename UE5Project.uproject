@@ -10,6 +10,14 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "AsyncLoadingScreen",
+			"Enabled": true
+		},
+		{
+			"Name": "ExGameplayPlugin",
+			"Enabled": true
 		}
 	]
 }
