@@ -3,6 +3,14 @@
 	"EngineAssociation": "{74B25976-4A47-1275-C823-4FB41384D2CB}",
 	"Category": "",
 	"Description": "",
+	"Modules": [
+		{
+			"Name": "UE5Project",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+
 	"Plugins": [
 		{
 			"Name": "ModelingToolsEditorMode",

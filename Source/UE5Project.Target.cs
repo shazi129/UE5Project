@@ -7,6 +7,8 @@ public class UE5ProjectTarget : TargetRules
 {
 	public UE5ProjectTarget( TargetInfo Target) : base(Target)
 	{
+		bAllowHotReload = true;
+		LinkType = TargetLinkType.Modular;
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.AddRange( new string[] { "UE5Project" } );
