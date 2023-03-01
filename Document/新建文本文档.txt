@@ -1,0 +1,4 @@
+$(TargetPath)
+"$(SolutionDir)UE5Project.uproject" -skipcompile
+
+LoadModulesForEnabledPlugins
