@@ -34,4 +34,6 @@ public:
 	UFUNCTION(Reliable, NetMultiCast, WithValidation, BlueprintCallable)
 		void NotifyServerTestResult(const FRPCParamater& Paramater);
 
+	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
+		void ServerJump();
 };

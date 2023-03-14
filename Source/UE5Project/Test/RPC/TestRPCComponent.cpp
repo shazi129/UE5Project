@@ -1,4 +1,5 @@
 #include "TestRPCComponent.h"
+#include "GameFramework/Character.h"
 
 void UTestRPCComponent::BeginPlay()
 {
@@ -46,4 +47,18 @@ void UTestRPCComponent::NotifyServerTestResult_Implementation(const FRPCParamate
 	AActor* Owner = GetOwner();
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::NotifyServerTestResult_Implementation, role[%d], ErrMsg[%d], ErrCode[%s]"), Owner->GetLocalRole(), Paramater.ErrCode, *Paramater.ErrMsg);
 
+}
+
+bool UTestRPCComponent::ServerJump_Validate()
+{
+	return true;
+}
+
+void UTestRPCComponent::ServerJump_Implementation()
+{
+	ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner());
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->Jump();
+	}
 }
