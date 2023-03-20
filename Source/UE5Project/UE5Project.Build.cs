@@ -21,7 +21,8 @@ public class UE5Project : ModuleRules
             "ApplicationCore",
             "ModularGameplay",
             "GameFeatures",
-            "Projects"
+            "Projects",
+            "SmartObjectsModule"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

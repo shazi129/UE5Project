@@ -1,3 +1,12 @@
-$(TargetPath)
+调试：
 
-$(ProjectDir)
+==================
+$(TargetPath)
+"$(SolutionDir)UE5Project.uproject" -skipcompile
+
+==================
+$(SolutionDir)../UE5Project_out/Windows/UE5Project/Binaries/Win64/UE5Project-Win64-Debug.exe
+
+
+===================
+"$(SolutionDir)UE5Project.uproject" -run=cook -platform=win64
