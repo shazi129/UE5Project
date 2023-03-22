@@ -9,10 +9,13 @@ Binaries/
 Intermediate/
 Saved/
 DerivedDataCache/
+Build/
+Content/JavaScript/
 
 Plugins/**/Binaries/
 Plugins/**/Intermediate/
 Plugins/**/Saved/
 Plugins/**/DerivedDataCache/
+Plugins/IgnoredPlugins
 
 ts_file_versions_info.json

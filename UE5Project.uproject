@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{2A01B8EA-44DC-F570-AB39-B18990EE13A4}",
+	"EngineAssociation": "{74B25976-4A47-1275-C823-4FB41384D2CB}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -24,6 +24,18 @@
 		},
 		{
 			"Name": "ExGameplayPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "Puerts",
+			"Enabled": false
+		},
+		{
+			"Name": "SmartObjects",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayBehaviorSmartObjects",
 			"Enabled": true
 		}
 	]
