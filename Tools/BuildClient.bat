@@ -7,6 +7,8 @@ echo %ProjectPath%
 set OutputPath=D:/Workspace/UE_Workspace/UE5Project_out
 echo %OutputPath%
 
+rm -rf %OutputPath%
+
 "%EditorPath%/Engine/Build/BatchFiles/RunUAT.bat" -ScriptsForProject="%ProjectPath%" Turnkey ^
 	-command=VerifySdk -platform=Win64 -UpdateIfNeeded -EditorIO -project="%ProjectPath%" BuildCookRun -nop4 -utf8output -cook ^
 	-project="%ProjectPath%"  -ue4exe="%EditorPath%/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" -platform=Win64 ^
