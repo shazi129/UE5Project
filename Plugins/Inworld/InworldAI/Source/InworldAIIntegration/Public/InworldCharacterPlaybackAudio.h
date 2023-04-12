@@ -23,50 +23,50 @@ public:
 	float* operator[](const FString& Code);
 
 public:
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float PP = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float PP = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float FF = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float FF = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float TH = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float TH = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float DD = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float DD = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float Kk = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float Kk = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float CH = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float CH = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float SS = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float SS = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float Nn = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float Nn = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float RR = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float RR = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float Aa = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float Aa = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float E = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float E = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float I = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float I = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float O = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float O = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float U = 0.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float U = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (ClampMin = 0.f, ClampMax = 1.f))
-	float STOP = 1.f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = InWorldAI, meta = (ClampMin = 0.f, ClampMax = 1.f))
+		float STOP = 1.f;
 };
 
 
@@ -76,29 +76,29 @@ class INWORLDAIINTEGRATION_API UInworldCharacterPlaybackAudio : public UInworldC
 	GENERATED_BODY()
 
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInworldCharacterUtteranceStarted, float, Duration, FString,  CustomGesture);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInworldCharacterUtteranceStarted, float, Duration, FString, CustomGesture);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterUtteranceStarted OnUtteranceStarted;
+		FOnInworldCharacterUtteranceStarted OnUtteranceStarted;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInworldCharacterUtteranceStopped);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterUtteranceStopped OnUtteranceStopped;
+		FOnInworldCharacterUtteranceStopped OnUtteranceStopped;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInworldCharacterUtteranceInterrupted);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterUtteranceInterrupted OnUtteranceInterrupted;
+		FOnInworldCharacterUtteranceInterrupted OnUtteranceInterrupted;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInworldCharacterSilenceStarted, float, Duration);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterSilenceStarted OnSilenceStarted;
+		FOnInworldCharacterSilenceStarted OnSilenceStarted;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInworldCharacterSilenceStopped);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterSilenceStopped OnSilenceStopped;
+		FOnInworldCharacterSilenceStopped OnSilenceStopped;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInworldCharacterVisemeBlendsUpdated, FInworldCharacterVisemeBlends, VisemeBlends);
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
-	FOnInworldCharacterVisemeBlendsUpdated OnVisemeBlendsUpdated;
+		FOnInworldCharacterVisemeBlendsUpdated OnVisemeBlendsUpdated;
 
 	virtual void BeginPlay_Implementation() override;
 	virtual void EndPlay_Implementation() override;
@@ -109,10 +109,10 @@ public:
 	virtual void Visit(const Inworld::FCharacterMessageSilence& Event) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Inworld")
-	float GetRemainingTimeForCurrentUtterance() const;
+		float GetRemainingTimeForCurrentUtterance() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Inworld")
-	const FInworldCharacterVisemeBlends& GetVismeBlends() const { return VisemeBlends; }
+		const FInworldCharacterVisemeBlends& GetVismeBlends() const { return VisemeBlends; }
 
 	virtual void HandlePlayerTalking(const Inworld::FCharacterMessageUtterance& Message) override;
 
@@ -123,7 +123,7 @@ public:
 		Silence,
 	};
 
-	EState GetState() const 
+	EState GetState() const
 	{
 		return State;
 	}
@@ -131,8 +131,8 @@ public:
 protected:
 	TWeakObjectPtr<UAudioComponent> AudioComponent;
 
-	UPROPERTY(BlueprintReadOnly)
-	USoundWave* SoundWave;
+	UPROPERTY(BlueprintReadOnly, Category = InWorldAI)
+		USoundWave* SoundWave;
 
 	std::string AudioData;
 

@@ -38,6 +38,8 @@ public class InworldAINdk : ModuleRules
 
     public InworldAINdk(ReadOnlyTargetRules Target) : base(Target)
     {
+        bPrecompile = true;
+
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(

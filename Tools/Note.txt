@@ -9,4 +9,4 @@ $(SolutionDir)../UE5Project_out/Windows/UE5Project/Binaries/Win64/UE5Project-Win
 
 
 ===================
-"$(SolutionDir)UE5Project.uproject" -run=cook -platform=win64
+"$(SolutionDir)UE5Project.uproject" -run=cook -TargetPlatform=Windows

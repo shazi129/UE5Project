@@ -37,6 +37,22 @@
 		{
 			"Name": "GameplayBehaviorSmartObjects",
 			"Enabled": true
+		},
+		{
+			"Name": "AnimToTexture",
+			"Enabled": true
+		},
+		{
+			"Name": "InworldAI",
+			"Enabled": false
+		},
+		{
+			"Name": "InworldMetahuman",
+			"Enabled": false
+		},
+		{
+			"Name": "InworldReadyPlayerMe",
+			"Enabled": false
 		}
 	]
 }
