@@ -53,6 +53,18 @@
 		{
 			"Name": "InworldReadyPlayerMe",
 			"Enabled": false
+		},
+		{
+			"Name": "MassGameplay",
+			"Enabled": true
+		},
+		{
+			"Name": "MassCrowd",
+			"Enabled": true
+		},
+		{
+			"Name": "MassAI",
+			"Enabled": true
 		}
 	]
 }
