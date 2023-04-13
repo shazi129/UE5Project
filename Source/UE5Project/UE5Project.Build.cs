@@ -22,7 +22,12 @@ public class UE5Project : ModuleRules
             "ModularGameplay",
             "GameFeatures",
             "Projects",
-            "SmartObjectsModule"
+            "SmartObjectsModule",
+
+            //TestMass
+            "MassEntity",
+            "MassSpawner",
+            "MassCommon",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
