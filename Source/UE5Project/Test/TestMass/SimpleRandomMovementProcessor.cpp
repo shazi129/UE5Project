@@ -2,6 +2,7 @@
 #include "MassCommonFragments.h"
 #include "MassCommonTypes.h"
 #include "SimpleMovementFragment.h"
+#include "LogicTest/MassLogicTest.h"
 
 USimpleRandomMovementProcessor::USimpleRandomMovementProcessor()
 {
@@ -15,6 +16,7 @@ void USimpleRandomMovementProcessor::ConfigureQueries()
 {
 	EntityQuery.AddRequirement<FTransformFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddRequirement<FSimpleMovementFragment>(EMassFragmentAccess::ReadWrite);
+	//EntityQuery.AddRequirement<FFloatFragment>(EMassFragmentAccess::ReadWrite);
 }
 
 void USimpleRandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
@@ -23,6 +25,9 @@ void USimpleRandomMovementProcessor::Execute(FMassEntityManager& EntityManager, 
 	{
 		const TArrayView<FTransformFragment> TransformsList = Context.GetMutableFragmentView<FTransformFragment>();
 		const TArrayView<FSimpleMovementFragment> SimpleMovementsList = Context.GetMutableFragmentView<FSimpleMovementFragment>();
+
+		//const TArrayView<FFloatFragment> FloatList = Context.GetMutableFragmentView<FFloatFragment>();
+		//UE_LOG(LogTemp, Error, TEXT("============%d"), FloatList.Num());
 
 		const float WorldDeltaTime = Context.GetDeltaTimeSeconds();
 		for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); ++EntityIndex)
