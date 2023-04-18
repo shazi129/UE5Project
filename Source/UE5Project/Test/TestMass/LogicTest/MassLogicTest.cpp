@@ -91,6 +91,7 @@ UMassLogicTestProcessor::UMassLogicTestProcessor()
 	bAutoRegisterWithProcessingPhases = true;
 	ExecutionFlags = (int32)EProcessorExecutionFlags::All;
 	ExecutionOrder.ExecuteBefore.Add(UE::Mass::ProcessorGroupNames::Avoidance);
+	ExecutionOrder.ExecuteAfter.Add(FName("SimpleRandomMovementProcessor"));
 	EntityQuery.RegisterWithProcessor(*this);
 }
 
