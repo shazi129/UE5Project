@@ -29,6 +29,7 @@ public class UE5Project : ModuleRules
             "MassSpawner",
             "MassCommon",
             "MassRepresentation",
+            "MassLOD",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

@@ -9,6 +9,7 @@ USimpleRandomMovementProcessor::USimpleRandomMovementProcessor()
 	bAutoRegisterWithProcessingPhases = true;
 	ExecutionFlags = (int32)EProcessorExecutionFlags::All;
 	ExecutionOrder.ExecuteBefore.Add(UE::Mass::ProcessorGroupNames::Avoidance);
+	ExecutionOrder.ExecuteAfter.Add(FName("MassSceneComponentLocationToMassTranslator"));
 	EntityQuery.RegisterWithProcessor(*this);
 }
 
