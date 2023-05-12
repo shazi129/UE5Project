@@ -20,6 +20,13 @@ struct FVectorFragment : public FMassFragment
 	FVector VectorValue;
 };
 
+USTRUCT()
+struct FEntityUinFragment : public FMassFragment
+{
+	GENERATED_BODY()
+	int64 Uin;
+};
+
 UCLASS(BlueprintType)
 class UMassLogicTestSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
 {
@@ -35,6 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TestQuery();
+
+	UFUNCTION(BlueprintCallable)
+	void AddEntity(int Count);
 };
 
 UCLASS()

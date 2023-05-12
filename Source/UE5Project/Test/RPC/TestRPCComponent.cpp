@@ -1,4 +1,5 @@
 #include "TestRPCComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
 
 void UTestRPCComponent::BeginPlay()
@@ -13,17 +14,18 @@ void UTestRPCComponent::StartServerTest()
 	AActor* Owner = GetOwner();
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::StartServerTest, role[%d]"), Owner->GetLocalRole());
 
-	ServerTest();
+	RepVector.Set(RepVector.X +1, 0, 0);
+	ServerTest(1, "Hello World", FVector(RepVector.X + 1, RepVector.Y + 1, RepVector.Z + 1));
 }
 
-bool UTestRPCComponent::ServerTest_Validate()
+bool UTestRPCComponent::ServerTest_Validate(const int IntValue, const FString& StringValue, const FVector& VectorValue)
 {
 	AActor* Owner = GetOwner();
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::ServerTest_Validate, role[%d]"), Owner->GetLocalRole());
 	return true;
 }
 
-void UTestRPCComponent::ServerTest_Implementation()
+void UTestRPCComponent::ServerTest_Implementation(const int IntValue, const FString& StringValue, const FVector& VectorValue)
 {
 	AActor* Owner = GetOwner();
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::ServerTest_Implementation, role[%d]"), Owner->GetLocalRole());
@@ -33,6 +35,8 @@ void UTestRPCComponent::ServerTest_Implementation()
 	Result.ErrMsg = "ServerTest_Implementation return";
 
 	NotifyServerTestResult(Result);
+
+	RepVector = VectorValue;
 }
 
 bool UTestRPCComponent::NotifyServerTestResult_Validate(const FRPCParamater& Paramater)
@@ -61,4 +65,15 @@ void UTestRPCComponent::ServerJump_Implementation()
 	{
 		OwnerCharacter->Jump();
 	}
+}
+
+void UTestRPCComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepVector, COND_OwnerOnly);
+}
+
+void UTestRPCComponent::OnRep_RepVector()
+{
+	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::OnRep_RepVector"));
 }

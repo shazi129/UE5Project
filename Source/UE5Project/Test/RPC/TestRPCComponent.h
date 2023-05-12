@@ -29,11 +29,21 @@ public:
 		void StartServerTest();
 
 	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
-		void ServerTest();
+		void ServerTest(const int IntValue, const FString& StringValue, const FVector& VectorValue);
 
 	UFUNCTION(Reliable, NetMultiCast, WithValidation, BlueprintCallable)
 		void NotifyServerTestResult(const FRPCParamater& Paramater);
 
 	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
 		void ServerJump();
+
+	UFUNCTION()
+		void OnRep_RepVector();
+
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
+	UPROPERTY(Replicated, ReplicatedUsing=OnRep_RepVector)
+		FVector RepVector;
 };

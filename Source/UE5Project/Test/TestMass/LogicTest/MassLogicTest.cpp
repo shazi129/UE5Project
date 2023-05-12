@@ -103,4 +103,14 @@ void UMassLogicTestProcessor::ConfigureQueries()
 
 void UMassLogicTestProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
+	EntityQuery.ForEachEntityChunk(EntityManager, Context, [this](FMassExecutionContext& ExecuteContext) 
+	{
+			//ExecuteContext.Defer().DestroyEntities();
+	});
+}
+
+void UMassLogicTestSubsystem::AddEntity(int Count)
+{
+	UMassEntitySubsystem* Subsystem = GetWorld()->GetSubsystem<UMassEntitySubsystem>();
+	FMassEntityManager& EntityManager = Subsystem->GetMutableEntityManager();
 }
