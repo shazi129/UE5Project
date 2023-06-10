@@ -1,4 +1,4 @@
-set EditorPath=D:/Workspace/UnrealEngine
+set EditorPath=D:/Workspace/UE/UnrealEngine
 set ToolsPath=%~dp0
 
 mkdir %ToolsPath%..\Content\Characters\
