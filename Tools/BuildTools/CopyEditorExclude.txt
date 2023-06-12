@@ -1,0 +1,13 @@
+.pdb
+\Linux\
+\Mac\
+\Intermediate\
+\Source\
+\Saved\
+\Engine\Programs\
+\Engine\Saved\
+\Engine\Documentation\
+\Engine\Extras\
+\Engine\Platforms\
+Engine\DerivedDataCache
+\__pycache__\
