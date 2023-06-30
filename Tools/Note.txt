@@ -5,7 +5,7 @@ $(TargetPath)
 "$(SolutionDir)UE5Project.uproject" -skipcompile
 
 ==================
-$(SolutionDir)../UE5Project_out/Windows/UE5Project/Binaries/Win64/UE5Project-Win64-Debug.exe
+D:\TIKI_STAR_BUILD\WinGame_614\Windows\soc_client\Binaries\Win64\soc_client.exe
 
 
 ===================
