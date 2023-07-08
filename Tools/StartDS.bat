@@ -1,10 +1,10 @@
-set EditorPath=D:\Workspace\UnrealEngine
+set EditorPath=C:\MetaWorld\UnrealEngine
 echo %EditorPath%
 
-set ProjectPath=D:/Workspace/UE_Workspace/UE5Project/UE5Project.uproject
+set ProjectPath=C:\MetaWorld\UE5Project\UE5Project.uproject
 echo %ProjectPath%
 
-set EditorExe=D:\Workspace\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Win64-Debug.exe
+set EditorExe=C:\MetaWorld\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Win64-Debug.exe
 
 
 set Map=/Game/MainContent/MyTestMap
