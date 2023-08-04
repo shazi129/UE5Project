@@ -39,6 +39,7 @@ void UTestRPCComponent::ServerTest_Implementation(const int IntValue, const FStr
 	NotifyServerTestResult(Result);
 
 	RepVector = VectorValue;
+	RepIntArray.Add(RepVector.X);
 }
 
 bool UTestRPCComponent::NotifyServerTestResult_Validate(const FRPCParamater& Paramater)
@@ -73,9 +74,15 @@ void UTestRPCComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepVector, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepIntArray, COND_OwnerOnly);
 }
 
 void UTestRPCComponent::OnRep_RepVector()
 {
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::OnRep_RepVector"));
+}
+
+void UTestRPCComponent::OnRep_RepIntArray()
+{
+	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::OnRep_RepIntArray"));
 }
