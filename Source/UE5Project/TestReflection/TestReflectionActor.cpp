@@ -1,4 +1,5 @@
 #include "TestReflectionActor.h"
+#include "SingleTest/TemplatHeader.h"
 
 void ATestReflectionActor::Debug()
 {
@@ -25,7 +26,7 @@ void ATestReflectionActor::SetObjectIntValue(UObject* Target, FName PropertyName
 	if (Property != nullptr)
 	{
 		void* PropertyAddress = Property->ContainerPtrToValuePtr<void>(Target);
-		Property->SetIntPropertyValue(PropertyAddress, (int64)Value);
+		SetAddressValue(PropertyAddress, Value);
 	}
 }
 
@@ -36,7 +37,7 @@ void ATestReflectionActor::SetObjectStringValue(UObject* Target, FName PropertyN
 	if (Property != nullptr)
 	{
 		void* PropertyAddress = Property->ContainerPtrToValuePtr<void>(Target);
-		Property->SetPropertyValue(PropertyAddress, (FString)Value);
+		SetAddressValue(PropertyAddress, Value);
 	}
 }
 
@@ -47,7 +48,7 @@ void ATestReflectionActor::SetObjectVectorValue(UObject* Target, FName PropertyN
 	if (Property != nullptr)
 	{
 		void* PropertyAddress = Property->ContainerPtrToValuePtr<void>(Target);
-		*(FVector*)PropertyAddress = Value;
+		SetAddressValue(PropertyAddress, Value);
 	}
 }
 
@@ -62,7 +63,7 @@ void ATestReflectionActor::SetObjectIntArrayValue(UObject* Target, FName Propert
 			if (NumericProperty->IsInteger())
 			{
 				void* PropertyAddress = Property->ContainerPtrToValuePtr<void>(Target);
-				*((TArray<int32>*)PropertyAddress) = Value;
+				SetAddressValue(PropertyAddress, Value);
 			}
 		}
 	}
@@ -70,6 +71,7 @@ void ATestReflectionActor::SetObjectIntArrayValue(UObject* Target, FName Propert
 
 void ATestReflectionActor::DebugObject(UObject* Target)
 {
+	CHECK_TARGET()
 	if (UFunction* Function = Target->FindFunction(FName("Debug")))
 	{
 		if (Function)
