@@ -1,5 +1,7 @@
 #include "SingleTestLibrary.h"
 #include "TemplatHeader.h"
+#include <iostream>
+#include <string>
 
 void Encode(TArray<int8>& Buffer, const void* Value, size_t Size)
 {
@@ -17,7 +19,11 @@ void USingleTestLibrary::TestDataConvert()
 	UE_LOG(LogTemp, Log, TEXT("%s, double: %f -> %f"), *FString(__FUNCTION__), DoubleValue, To<double>(Buffer));
 
 	const char StrValue[] = "hello world";
-	Encode(Buffer, StrValue, sizeof(StrValue));
+	//Encode(Buffer, StrValue, sizeof(StrValue));
+
+	std::string str(StrValue);
+	Encode(Buffer, str.c_str(), str.size());
+	
 	UE_LOG(LogTemp, Log, TEXT("%s, string: %s -> %s"), *FString(__FUNCTION__), *FString(StrValue), *(To<FString>(Buffer)));
 
 	EMovementMode MovementMode = EMovementMode::MOVE_Falling;
