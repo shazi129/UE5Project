@@ -8,6 +8,10 @@ void UMassLogicTestSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
 	UMassEntitySubsystem* Subsystem = GetWorld()->GetSubsystem<UMassEntitySubsystem>();
+	if (!Subsystem)
+	{
+		return;
+	}
 	FMassEntityManager& EntityManager = Subsystem->GetMutableEntityManager();
 
 	FMassArchetypeCompositionDescriptor Descriptor;
