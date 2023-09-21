@@ -18,6 +18,11 @@ void UTestRPCComponent::StartServerTest()
 
 	RepVector.Set(RepVector.X +1, 0, 0);
 	ServerTest(1, "Hello World", FVector(RepVector.X + 1, RepVector.Y + 1, RepVector.Z + 1));
+
+	FInstancedStruct MsgBody;
+	MsgBody.InitializeAs<FRPCParamater>();
+	FRPCParamater& Paramter = MsgBody.GetMutable<FRPCParamater>();
+	ServerTestInstancedStruct(SendMsgTag, MsgBody);
 }
 
 bool UTestRPCComponent::ServerTest_Validate(const int IntValue, const FString& StringValue, const FVector& VectorValue)
@@ -75,6 +80,16 @@ void UTestRPCComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepVector, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepIntArray, COND_OwnerOnly);
+}
+
+bool UTestRPCComponent::ServerTestInstancedStruct_Validate(const FGameplayTag& MsgTag, const FInstancedStruct& MsgBody)
+{
+	return true;
+}
+
+void UTestRPCComponent::ServerTestInstancedStruct_Implementation(const FGameplayTag& MsgTag, const FInstancedStruct& MsgBody)
+{
+	UE_LOG(LogTemp, Log, TEXT("%s MsgTag:%s, MsgBody:%s"), *FString(__FUNCTION__), *GetNameSafe(MsgBody.GetScriptStruct()));
 }
 
 void UTestRPCComponent::OnRep_RepVector()

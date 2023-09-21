@@ -30,6 +30,8 @@ public class UE5Project : ModuleRules
             "MassCommon",
             "MassRepresentation",
             "MassLOD",
+
+            "StructUtils"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

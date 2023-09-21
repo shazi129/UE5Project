@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "GameplayTags.h"
+#include "InstancedStruct.h"
 #include "TestRPCComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -45,10 +46,18 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+
+	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
+	void ServerTestInstancedStruct(const FGameplayTag& MsgTag, const FInstancedStruct& MsgBody);
+
 public:
 	UPROPERTY(Replicated, ReplicatedUsing=OnRep_RepVector)
 		FVector RepVector;
 
 	UPROPERTY(Replicated, ReplicatedUsing = OnRep_RepIntArray)
 		TArray<float> RepIntArray;
+
+public:
+	UPROPERTY(EditAnywhere)
+		FGameplayTag SendMsgTag;
 };
