@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTags.h"
 #include "InstancedStruct.h"
+#include "AbilitySystemComponent.h"
 #include "TestRPCComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -15,6 +16,8 @@ struct FRPCParamater
 
 	UPROPERTY(BlueprintReadWrite)
 	FString ErrMsg;
+
+	FString ToString() const;
 };
 
 UCLASS(BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent))
@@ -25,6 +28,7 @@ class UTestRPCComponent : public UActorComponent
 public:
 
 	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
 		void StartServerTest();
@@ -50,6 +54,13 @@ public:
 	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
 	void ServerTestInstancedStruct(const FGameplayTag& MsgTag, const FInstancedStruct& MsgBody);
 
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateGameplayTag(FGameplayTag GameplayTag);
+
+	UFUNCTION(Reliable, Server, WithValidation, BlueprintCallable)
+		void ServerUpdateGameplayTag(const FGameplayTag& GameplayTag);
+
 public:
 	UPROPERTY(Replicated, ReplicatedUsing=OnRep_RepVector)
 		FVector RepVector;
@@ -60,4 +71,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 		FGameplayTag SendMsgTag;
+
+private:
+	UAbilitySystemComponent* ASC;
 };

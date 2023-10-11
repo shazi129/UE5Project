@@ -2,13 +2,21 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
 
+
 void UTestRPCComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	AActor* Owner = GetOwner();
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::BeginPlay, role[%d], NetMode[%d]"), Owner->GetLocalRole(), Owner->GetNetMode());
 
+	ASC = Cast<UAbilitySystemComponent>(GetOwner()->GetComponentByClass(UAbilitySystemComponent::StaticClass()));
+
 	SetIsReplicated(true);
+}
+
+void UTestRPCComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UTestRPCComponent::StartServerTest()
@@ -22,6 +30,8 @@ void UTestRPCComponent::StartServerTest()
 	FInstancedStruct MsgBody;
 	MsgBody.InitializeAs<FRPCParamater>();
 	FRPCParamater& Paramter = MsgBody.GetMutable<FRPCParamater>();
+	Paramter.ErrCode = 9527;
+	Paramter.ErrMsg = "asdfasdfasdfasdfasdf";
 	ServerTestInstancedStruct(SendMsgTag, MsgBody);
 }
 
@@ -100,4 +110,32 @@ void UTestRPCComponent::OnRep_RepVector()
 void UTestRPCComponent::OnRep_RepIntArray()
 {
 	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::OnRep_RepIntArray"));
+}
+
+void UTestRPCComponent::UpdateGameplayTag(FGameplayTag GameplayTag)
+{
+	ENetRole Role = GetOwner()->GetLocalRole();
+
+	if (ASC && Role == ENetRole::ROLE_AutonomousProxy)
+	{
+		ServerUpdateGameplayTag(GameplayTag);
+	}
+}
+
+bool UTestRPCComponent::ServerUpdateGameplayTag_Validate(const FGameplayTag& GameplayTag)
+{
+	return true;
+}
+
+void UTestRPCComponent::ServerUpdateGameplayTag_Implementation(const FGameplayTag& GameplayTag)
+{
+	if (ASC)
+	{
+		ASC->UpdateTagMap(GameplayTag, 1);
+	}
+}
+
+FString FRPCParamater::ToString() const
+{
+	return FString::Printf(TEXT("Code:%d, Msg:%s"), ErrCode, *ErrMsg);
 }

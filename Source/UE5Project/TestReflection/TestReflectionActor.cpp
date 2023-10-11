@@ -58,7 +58,7 @@ void ATestReflectionActor::SetObjectIntArrayValue(UObject* Target, FName Propert
 	FArrayProperty* Property = FindFieldChecked<FArrayProperty>(Target->GetClass(), PropertyName);
 	if (Property != nullptr)
 	{
-		if (FNumericProperty* NumericProperty = Cast<FNumericProperty>(Property->Inner))
+		if (FNumericProperty* NumericProperty = (FNumericProperty*)(Property->Inner))
 		{
 			if (NumericProperty->IsInteger())
 			{
