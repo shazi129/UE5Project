@@ -30,7 +30,7 @@ public class UE5Project : ModuleRules
             "MassCommon",
             "MassRepresentation",
             "MassLOD",
-
+            "PawnState",
             "StructUtils"
         });
 

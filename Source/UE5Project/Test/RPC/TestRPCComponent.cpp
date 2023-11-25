@@ -1,7 +1,7 @@
 #include "TestRPCComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
-
+#include "PawnStateTypes.h"
 
 void UTestRPCComponent::BeginPlay()
 {
@@ -133,9 +133,4 @@ void UTestRPCComponent::ServerUpdateGameplayTag_Implementation(const FGameplayTa
 	{
 		ASC->UpdateTagMap(GameplayTag, 1);
 	}
-}
-
-FString FRPCParamater::ToString() const
-{
-	return FString::Printf(TEXT("Code:%d, Msg:%s"), ErrCode, *ErrMsg);
 }

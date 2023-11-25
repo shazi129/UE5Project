@@ -6,19 +6,6 @@
 #include "AbilitySystemComponent.h"
 #include "TestRPCComponent.generated.h"
 
-USTRUCT(BlueprintType)
-struct FRPCParamater
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadWrite)
-	int ErrCode = 0;
-
-	UPROPERTY(BlueprintReadWrite)
-	FString ErrMsg;
-
-	FString ToString() const;
-};
 
 UCLASS(BlueprintType, Blueprintable, meta=(BlueprintSpawnableComponent))
 class UTestRPCComponent : public UActorComponent
