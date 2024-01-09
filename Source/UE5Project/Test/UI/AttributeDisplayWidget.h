@@ -43,4 +43,6 @@ protected:
 	void OnManaChange(const FExOnAttributeChangeData& ChangeData);
 private:
 	UExAbilitySystemComponent* ASC;
+
+
 };
