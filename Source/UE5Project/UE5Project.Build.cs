@@ -16,6 +16,7 @@ public class UE5Project : ModuleRules
             "ExUMG",
 			"InputCore",
 			"GameplayAbilities",
+            "ExGameplayAbilities",
             "GameplayTags",
             "GameplayTasks",
             "ApplicationCore",
