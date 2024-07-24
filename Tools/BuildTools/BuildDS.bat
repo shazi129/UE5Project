@@ -1,10 +1,10 @@
-set EditorPath=D:/Workspace/UnrealEngine
+set EditorPath=%~dp0..\..\..\UnrealEngine
 echo %EditorPath%
 
-set ProjectPath=D:/Workspace/UE_Workspace/UE5Project/UE5Project.uproject
+set ProjectPath=%~dp0..\..\UE5Project.uproject
 echo %ProjectPath%
 
-set OutputPath=D:/Workspace/UE_Workspace/UE5Project_Out_DS
+set OutputPath=%~dp0..\..\..\UE5Project_Out_DS
 echo %OutputPath%
 
 rm -rf %OutputPath%

@@ -1,7 +1,7 @@
-set ProjectPath=D:/Workspace/UE_Workspace/UE5Project/UE5Project.uproject
+set ProjectPath=%~dp0..\UE5Project.uproject
 echo %ProjectPath%
 
-set EditorExe=D:\Workspace\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Win64-Debug.exe
+set EditorExe=%~dp0..\..\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Win64-Debug.exe
 
 
 set Map=/Game/MainContent/Login
