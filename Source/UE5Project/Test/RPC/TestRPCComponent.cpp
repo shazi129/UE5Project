@@ -14,6 +14,11 @@ void UTestRPCComponent::BeginPlay()
 	SetIsReplicated(true);
 }
 
+void UTestRPCComponent::OnRep_Stamina(int OldValue)
+{
+	UE_LOG(LogTemp, Log, TEXT("UTestRPCComponent::OnRep_Stamina, %d --> %d"), OldValue, Stamina);
+}
+
 void UTestRPCComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -90,6 +95,7 @@ void UTestRPCComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepVector, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(UTestRPCComponent, RepIntArray, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(UTestRPCComponent, Stamina, COND_None);
 }
 
 bool UTestRPCComponent::ServerTestInstancedStruct_Validate(const FGameplayTag& MsgTag, const FInstancedStruct& MsgBody)

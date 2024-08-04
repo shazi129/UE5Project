@@ -17,6 +17,12 @@ public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION()
+	void OnRep_Stamina(int OldValue);
+
+	UPROPERTY(Replicated, ReplicatedUsing = OnRep_Stamina)
+	int Stamina = 0;
+
 	UFUNCTION(BlueprintCallable)
 		void StartServerTest();
 
